@@ -1,13 +1,14 @@
 package dbs.bigdata.flink.pprl;
 
+import org.apache.flink.api.common.functions.GroupReduceFunction;
+import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.operators.FlatMapOperator;
+
 import java.util.ArrayList;
-import java.util.List;
-import org.apache.flink.api.common.functions.FlatMapFunction;
-import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple4;
-import org.apache.flink.util.Collector;
+import org.apache.flink.api.java.tuple.Tuple5;
 
 /**
  * 
@@ -25,42 +26,27 @@ public class BloomFilterFlinkJob {
 		// set up the execution environment
 		final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-		/*
-		// get input data
-		DataSet<String> text = env.fromElements(
-				"To be, or not to be,--that is the question:--",
-				"Whether 'tis nobler in the mind to suffer",
-				"The slings and arrows of outrageous fortune",
-				"Or to take arms against a sea of troubles,"
-				);
-		
-		DataSet<Tuple2<String, Integer>> counts =
-				// split up the lines in pairs (2-tuples) containing: (word,1)
-				text.flatMap(new LineSplitter())
-				// group by the tuple field "0" and sum up tuple field "1"
-				.groupBy(0)
-				.sum(1);
-
-		// execute and print result
-		counts.print();
-		*/
-		
-
 		// get input data, read all fields
-		DataSet<Tuple4<String, String, String, String>> persons =
+		DataSet<Tuple5<String, String, String, String, String>> persons =
 		  env.readCsvFile(PATH_TO_DATA_FILE)
 		    .lineDelimiter(LINE_DELIMITER)
 		    .fieldDelimiter(FIELD_DELIMITER)
-		    .types(String.class, String.class, String.class, String.class);
+		    .types(String.class, String.class, String.class, String.class, String.class);
 
+		final int nGramValue = 2;
+		FlatMapOperator<Tuple5<String, String, String, String, String>, Object> tokens = 
+				persons.flatMap(new NGramTokenizer(nGramValue));
 		
+		tokens.print();		
+		
+		/*
 		ArrayList<String> names = new ArrayList<String>();
 		
-		List<Tuple4<String, String, String, String>> personList = persons.collect();
+		List<Tuple5<String, String, String, String, String>> personList = persons.collect();
 		if (!personList.isEmpty()){
 			for (int i = 0; i < personList.size(); i++){
-				Tuple4<String, String, String, String> tupel = personList.get(i);
-				names.add(tupel.f0 + " " + tupel.f1);
+				Tuple5<String, String, String, String, String> tupel = personList.get(i);
+				names.add(tupel.f1 + " " + tupel.f2);
 			}
 		}
 		
@@ -68,8 +54,10 @@ public class BloomFilterFlinkJob {
 		System.out.println(tokens.toString());
 		
 		//BloomFilter bloomFilter = new BloomFilter(100, 32);
+		*/
 	}
 
+	/*
 	public static ArrayList<String> getTokensFromNames(ArrayList<String> names){
 		ArrayList<String> tokens = new ArrayList<String>();
 		
@@ -90,28 +78,5 @@ public class BloomFilterFlinkJob {
 		
 		return tokens;
 	}
-	
-	//
-	// 	User Functions
-	//
-	/**
-	 * Implements the string tokenizer that splits sentences into words as a user-defined
-	 * FlatMapFunction. The function takes a line (String) and splits it into
-	 * multiple pairs in the form of "(word,1)" (Tuple2<String, Integer>).
-	 */
-	public static final class LineSplitter implements FlatMapFunction<String, Tuple2<String, Integer>> {
-
-		@Override
-		public void flatMap(String value, Collector<Tuple2<String, Integer>> out) {
-			// normalize and split the line
-			String[] tokens = value.toLowerCase().split("\\W+");
-
-			// emit the pairs
-			for (String token : tokens) {
-				if (token.length() > 0) {
-					out.collect(new Tuple2<String, Integer>(token, 1));
-				}
-			}
-		}
-	}
+	*/
 }
