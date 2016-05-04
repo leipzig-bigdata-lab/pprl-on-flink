@@ -1,4 +1,1 @@
-*.*
-
-!.gitignore
-!*.java
+flink-java-project/target/
