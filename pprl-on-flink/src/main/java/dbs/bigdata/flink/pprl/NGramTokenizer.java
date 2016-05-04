@@ -3,17 +3,27 @@ package dbs.bigdata.flink.pprl;
 import java.util.ArrayList;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
-import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.util.Collector;
 
-public class NGramTokenizer implements FlatMapFunction<Tuple5<String, String, String, String, String>, Object> {
+/**
+ * Class for splitting the records of the data set (i.e. the quasi identifiers (qids)) into n-gram tokens.
+ * 
+ * @author mfranke
+ */
+public class NGramTokenizer implements FlatMapFunction<Tuple5<String, String, String, String, String>, Tuple2<String, String>> {
 
 	private static final long serialVersionUID = -8819111750339989196L;
 	private int ngram;
 	
-	NGramTokenizer(int ngram) throws Exception{
+	/**
+	 * @param ngram
+	 * 		-> the size n of the n-grams
+	 * @throws Exception
+	 * 		-> an excption is thrown if the value of ngram is smaller then one.
+	 */
+	public NGramTokenizer(int ngram) throws Exception{
 		if (ngram >= 1){
 			this.ngram = ngram;
 		}
@@ -23,7 +33,8 @@ public class NGramTokenizer implements FlatMapFunction<Tuple5<String, String, St
 	}
 	
 	@Override
-	public void flatMap(Tuple5<String, String, String, String, String> value, Collector<Object> out) throws Exception {
+	public void flatMap(Tuple5<String, String, String, String, String> value, Collector<Tuple2<String, String>> out)
+			throws Exception {
 		String name = value.f1 + " " + value.f2;
 		
 		// normalize
