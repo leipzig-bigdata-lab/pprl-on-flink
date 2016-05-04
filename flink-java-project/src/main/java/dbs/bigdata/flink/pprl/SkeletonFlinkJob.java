@@ -1,4 +1,4 @@
-package org.apache.flink.quickstart;
+package dbs.bigdata.flink.pprl;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -35,7 +35,7 @@ import org.apache.flink.api.java.ExecutionEnvironment;
  * 		target/flink-quickstart-0.1-SNAPSHOT-Sample.jar
  *
  */
-public class Job {
+public class SkeletonFlinkJob {
 
 	public static void main(String[] args) throws Exception {
 		// set up the execution environment
