@@ -8,6 +8,9 @@ import org.apache.flink.api.java.operators.ReduceOperator;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple5;
 
+import orestes.bloomfilter.BloomFilter;
+import orestes.bloomfilter.FilterBuilder;
+
 /**
  * The Flink job for building the bloom filters.
  * 
@@ -39,5 +42,19 @@ public class BloomFilterFlinkJob {
 		// merge the n-grams for the same record
 		ReduceOperator<Tuple2<String, String>> reducedTokensById = tokens.groupBy(0).reduce(new NGramReducer());
 		reducedTokensById.print();		
+
+		// testing bloom filter implementation
+		int expectedElements = 3;
+		double falsePositiveRate = 0.1;
+		
+		FilterBuilder filterBuilder = new FilterBuilder(expectedElements, falsePositiveRate);
+		BloomFilter<String> bloomFilter = filterBuilder.buildBloomFilter();
+		
+		bloomFilter.add("test");
+		System.out.println(bloomFilter.asString());
+		
+		bloomFilter.add("test2");
+		System.out.println(bloomFilter.asString());
+		
 	}
 }
