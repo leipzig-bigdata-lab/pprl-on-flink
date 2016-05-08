@@ -27,17 +27,17 @@ public class BloomFilterFlinkJob {
 		// set up the execution environment
 		final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-		// get input data, read all fields
-		DataSet<Tuple5<String, String, String, String, String>> persons =
-		  env.readCsvFile(PATH_TO_DATA_FILE)
-		    .lineDelimiter(LINE_DELIMITER)
-		    .fieldDelimiter(FIELD_DELIMITER)
-		    .types(String.class, String.class, String.class, String.class, String.class);
-
+		/*
+		VoterDataLoader voterLoader = new VoterDataLoader(env);
+		voterLoader.getAllData().print();
+		*/
+		
+		PersonDataLoader personLoader = new PersonDataLoader(env);
+		
 		// build the n-grams
 		final int nGramValue = 2;
 		FlatMapOperator<Tuple5<String, String, String, String, String>, Tuple2<String, String>> tokens = 
-				persons.flatMap(new NGramTokenizer(nGramValue));
+				personLoader.getAllData().flatMap(new NGramTokenizer(nGramValue));
 		
 		// merge the n-grams for the same record
 		ReduceOperator<Tuple2<String, String>> reducedTokensById = tokens.groupBy(0).reduce(new NGramReducer());
