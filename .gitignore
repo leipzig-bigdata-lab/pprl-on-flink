@@ -1,2 +1,12 @@
 pprl-on-flink/target/
 .DS_Store
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.pdf
+*.snm
+*.synctex.gz
+*.toc
