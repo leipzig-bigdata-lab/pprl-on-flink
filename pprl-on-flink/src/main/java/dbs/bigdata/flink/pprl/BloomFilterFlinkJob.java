@@ -1,10 +1,15 @@
 package dbs.bigdata.flink.pprl;
 
+import java.util.BitSet;
+
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.FlatMapOperator;
 import org.apache.flink.api.java.operators.ReduceOperator;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple5;
+
+import info.debatty.java.lsh.LSHMinHash;
+import info.debatty.java.lsh.MinHash;
 import orestes.bloomfilter.BloomFilter;
 import orestes.bloomfilter.FilterBuilder;
 
@@ -55,15 +60,51 @@ public class BloomFilterFlinkJob {
 		bloomFilter.add("test2");
 		System.out.println(bloomFilter.asString());
 		
+		BloomFilter<String> otherBloomFilter = filterBuilder.buildBloomFilter();
+		
+		otherBloomFilter.add("test");
+		
+		otherBloomFilter.add("te-t2");
+		
 		// TODO add (map) n-grams of each record to a bloom filter
 		
 		// TODO build blocks (use LSH for this) of bloom filters, where matches are supposed (flat map/reduce)
+		
+		int stages = 2;
+		int buckets = 2;
+		int dictionarySize = bloomFilter.getSize(); 
+		
+		
+		double similarityError = 0.1;
+		MinHash minhash = new MinHash(similarityError, dictionarySize);
+		
+		BitSet bloomFilterBitSet = bloomFilter.getBitSet();
+		
+		boolean[] vector1 = new boolean[bloomFilterBitSet.length()];
+		for (int i = 0; i < bloomFilterBitSet.length(); i++){
+			vector1[i] = bloomFilterBitSet.get(i);
+		}
+		
+		BitSet otherBloomFilterBitSet = otherBloomFilter.getBitSet();
+		
+		boolean[] vector2 = new boolean[bloomFilterBitSet.length()];
+		for (int i = 0; i < otherBloomFilterBitSet.length(); i++){
+			vector2[i] = otherBloomFilterBitSet.get(i);
+		}
+		
+		int[] sig1 = minhash.signature(vector1);
+		int[] sig2 = minhash.signature(vector2);
+		 
+		//System.out.println("Signature similarity: " + minhash.similarity(sig1, sig2));
+		//LSHMinHash lsh = new LSHMinHash(stages, buckets, dictionarySize);
+		
+		
 		
 		// TODO compare candidate bloom filter pairs of the same block and return similarity values (flat map)
 		
 		// TODO check similarity values against a threshold and keep only those pairs with a similarity value
 		// greater then the threshold (reduce)
 		
-		// TODO maybe send or save the "matching pairs" to the parties or a file 
+		// TODO maybe send or save the "matching pairs" to the partiespg or a file 
 	}
 }

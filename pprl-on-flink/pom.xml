@@ -90,6 +90,11 @@
       		<artifactId>bloom-filter</artifactId>
        		<version>1.0.7</version>
    		</dependency>
+   		<dependency>
+    		<groupId>info.debatty</groupId>
+    		<artifactId>java-lsh</artifactId>
+    		<version>0.8</version>
+		</dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
