@@ -62,18 +62,87 @@
 
         \subsection{Setting up \& testing Flink}
 
-        Apache Flink is downloadable from the Apache website \url{https://flink.apache.org}. The installation
-        is straight forward and therefore does not need any explanation here, since there is a very good
-        documentation on the Apache Flink website.
+            Apache Flink is downloadable from the Apache website \url{https://flink.apache.org}. The installation
+            is straight forward and therefore does not need any explanation here, since there is a very good
+            documentation on the Apache Flink website.
 
+            % Setting up test environment -> include java code
 
+        \subsection{Dataset}
+
+            % test data from Sehili        
+            % hadoop hdfs
+
+            The \textit{North Carolina Voter Registratin Databse} \url{http://dl.ncsbe.gov}
+            supports our puposes to test
+            first implementations of the Bloom-Filter and the LSH. This Dataset is one of the few
+            which includes real names, addresses as well as age. Since we want to encrypt this data
+            it is highly important that we use such data for our purposes.
+
+            Furthermore, the use of a DataCorruptor constructing subsets of the dataset as well as
+            modifying data is preferable. Implementing the corruptor in Java (transormation from python to java)
+            is therefore another issue of our work (see implementation-section).
+
+            % short explanatin of both datasets -> which data is relevant? -> .txt and .vcs data
 
     \section{Architecture}
 
+        % using hamming distance!
+
+        \begin{itemize}
+			\item Data Owner / Parteien
+				\begin{itemize}
+					\item Einigung über Paramter (Länge der N-Gramme, Anzahl Hashfunktionen,
+					Größe der Bloom Filter (Bloom-Filter muss flexibel bleiben; Token-Laenge muss flexibel sein), ...
+					\item Halten verschiedene Datensätze
+					\item Codierung der Records aus ihren Datensätze (Erstellung der Bloom Filter)
+					\item Blocking mittels LSH-MinHash 
+					(? Wo soll das Blocking durchgeführt werden ?)
+					\item Senden der Daten an die Linkage Unit
+				\end{itemize}
+			\item Linkage Unit
+				\begin{itemize}
+					\item Blocking mittels LSH-MinHash (?)
+					\item Durchführung des Linkage Algorithmus
+					\item Senden der Ergebnisse an die Data Owner / beteiligten Parteien
+				\end{itemize}	
+		\end{itemize} 
+
     \section{Implementation Plan}
 
-        % Test data from Sehili
+        % implementing own bloom-filter (flatmap->flatmap->reduce [in parallel] )
+        % implementing own LSH -> keys or subkeys
 
+		\begin{itemize}
+			\item Datenimport: Lesen des Voter-Files und Übertragung der relevanten Felder in
+			 ein DataSet
+			\begin{itemize}
+				\item Vorname
+				\item Nachname
+				\item Adresse
+				\item Geburtsdatum
+			\end{itemize}
+			\item Datenvorverarbeitung: Konkatenation und Normalisierung der relevanten
+			 Felder. Eventuell Einfügung von künstlichen IDs.
+			\item Erstellung N-Gramme: Überführung der konkatenierten QIDs in N-Gramme mit
+			 Hilfe einer FlatMap-Funktion.
+			\item Zusammenfassung der N-Gramme: Zusammenfassung aller N-Gramme des
+			 gleichen Records mit Hilfe einer Reduce-Funktion. (Eventuell zsfg. mit vorherigem
+			  Schritt?)
+			\item Erstellung der Bloom Filter: Aufnahme aller N-Gramme eines Records in einen
+			 Bloom Filter (Map-Funktion).
+		\end{itemize}
+
+ 		\begin{itemize}
+        		\item Blocking: Erstellung von Blöcken von Kandidat-Record-Paaren mit Hilfe von
+        		 LSH-MinHash. (FlatMap / Reduce)
+			\item Linkage I: Vergleich aller Kandidaten-Record-Paare eines Blocks mit Hilfe einer
+			 Ähnlichkeitsfunktion (FlatMap).
+			\item Linkage II: Vergleich aller Ähnlichkeitswerte mit dem Schwellwert. Behalte nur
+			 die Werte mit einem hinreichend guten Wert. (Reduce)
+			\item Bekanntgabe der Ergebnisse: Speicherung oder Versand der Matching Pairs.
+			 (Paar von IDs)
+		\end{itemize}
 
 %\begin{lstlisting}
 %\end{lstlisting}
