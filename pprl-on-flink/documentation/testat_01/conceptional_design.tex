@@ -105,36 +105,22 @@
         % implementing own bloom-filter (flatmap->flatmap->reduce [in parallel] )
         % implementing own LSH -> keys or subkeys
 
-		\begin{itemize}
-			\item Datenimport: Lesen des Voter-Files und Übertragung der relevanten Felder in
-			 ein DataSet
-			\begin{itemize}
-				\item Vorname
-				\item Nachname
-				\item Adresse
-				\item Geburtsdatum
-			\end{itemize}
-			\item Datenvorverarbeitung: Konkatenation und Normalisierung der relevanten
-			 Felder. Eventuell Einfügung von künstlichen IDs.
-			\item Erstellung N-Gramme: Überführung der konkatenierten QIDs in N-Gramme mit
-			 Hilfe einer FlatMap-Funktion.
-			\item Zusammenfassung der N-Gramme: Zusammenfassung aller N-Gramme des
-			 gleichen Records mit Hilfe einer Reduce-Funktion. (Eventuell zsfg. mit vorherigem
-			  Schritt?)
-			\item Erstellung der Bloom Filter: Aufnahme aller N-Gramme eines Records in einen
-			 Bloom Filter (Map-Funktion).
-		\end{itemize}
+        In order to implement our architecture we will first have to read the Voter-files and
+        extract the relevant data, i.e. first name, last name, address, and date of birth.
+        We then have to generate N-Grams. Therefore, we have to use the FlatMap function
+        in order to transfer the concatinated QIDs into N-Grams. N-Grams of the same record will then be
+        combined using a Reduce-function.
+        Having reduced the N-Grams of one record, Bloom-Filter will be calculated subsequently.
 
- 		\begin{itemize}
-        		\item Blocking: Erstellung von Blöcken von Kandidat-Record-Paaren mit Hilfe von
-        		 LSH-MinHash. (FlatMap / Reduce)
-			\item Linkage I: Vergleich aller Kandidaten-Record-Paare eines Blocks mit Hilfe einer
-			 Ähnlichkeitsfunktion (FlatMap).
-			\item Linkage II: Vergleich aller Ähnlichkeitswerte mit dem Schwellwert. Behalte nur
-			 die Werte mit einem hinreichend guten Wert. (Reduce)
-			\item Bekanntgabe der Ergebnisse: Speicherung oder Versand der Matching Pairs.
-			 (Paar von IDs)
-		\end{itemize}
+        The Linkage Unit will then block these records and create blocks of Candidate-Record-Pairs
+        using LSH-MinHash-function. That means that the FlatMap and Reduce functions will be used in
+        the order 'FlatMap->FlatMap->Reduce'.
+        For the first Linkage in the Linkage Unit all Candidates-Record-Pairs of one block are
+        being compared with the help of the FlatMap function.
+        The second linkage will compare all Candidates-Record-Pairs of a block using the
+        FlatMap function as well. The final third linkage will then compare all
+        Candidates-Record-Pairs of a block using the Reduce-function.
+        Finally, the results are stored for further examitnation by the data owners.
 
 %\begin{lstlisting}
 %\end{lstlisting}
