@@ -67,6 +67,9 @@
             documentation on the Apache Flink website.
 
             % Setting up test environment -> include java code
+            In case of testing the Bloom Filter we decided to use the Bloom Filter by Baqend. Furthermore,
+            we used Debatty as a framwork for LSH. Both functions will be implemented by ourself for our
+            purposes.
 
         \subsection{Dataset}
 
@@ -89,24 +92,13 @@
 
         % using hamming distance!
 
-        \begin{itemize}
-			\item Data Owner / Parteien
-				\begin{itemize}
-					\item Einigung über Paramter (Länge der N-Gramme, Anzahl Hashfunktionen,
-					Größe der Bloom Filter (Bloom-Filter muss flexibel bleiben; Token-Laenge muss flexibel sein), ...
-					\item Halten verschiedene Datensätze
-					\item Codierung der Records aus ihren Datensätze (Erstellung der Bloom Filter)
-					\item Blocking mittels LSH-MinHash 
-					(? Wo soll das Blocking durchgeführt werden ?)
-					\item Senden der Daten an die Linkage Unit
-				\end{itemize}
-			\item Linkage Unit
-				\begin{itemize}
-					\item Blocking mittels LSH-MinHash (?)
-					\item Durchführung des Linkage Algorithmus
-					\item Senden der Ergebnisse an die Data Owner / beteiligten Parteien
-				\end{itemize}	
-		\end{itemize} 
+        The data owner will represent our data, i.e. the North Carolina Voter Registration and the
+        given csv-files given by Sehili. We will use the first name, last name, address, and date of birth.
+        Both, the length of the Bloom-Filter input and its token length must be flexible. That is, the data is encoded
+        via the Bloom-Filter which then solves as input to the Lnkage Unit.
+        The Linkage Unit uses LSH-MinHashes in order to block the data. The LSH-MinHashes will use the Hamming-Distance
+        to claculate the LSH. After blocking the data, the Linkage algorithm calculates the desired outcome,
+        which is sent to the data owner. That concludes the cycle of PPRL with Flink.
 
     \section{Implementation Plan}
 
