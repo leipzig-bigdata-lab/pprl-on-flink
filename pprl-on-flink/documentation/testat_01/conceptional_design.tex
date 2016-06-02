@@ -49,42 +49,42 @@
 
     \section{Introduction}
 
-        In order to fulfill the first assignment of the \textit{Big Data Praktikum} three main topics had to be
-        implemented. Firstly, the system had to be set up, i.e. setting up Fllink on a computer system. Secondly,
-        the planned architecture for the implementation of PPRL with Flink hat to be outlined. Thirdly, an
-        implementation plan had ot be outlined in order to apply the given problem.
+        In order to fulfill the first assignment of the \textit{Big Data Praktikum} three main topics have to be
+        implemented. Firstly, the system has to be set up, i.e. Apache Flink has to run on a computer system. Secondly,
+        the planned architecture for the implementation of PPRL with Flink has to be outlined. Thirdly, an
+        implementation plan has to be described for future work.
         In the following sections all three issues are discussed.
 
     \section{Installation}
 
-        In this sectin we will shortly outline setting up the Flink on a machine in order to test it and
+        In this section we will shortly outline setting up the Flink on a machine in order to test it and
         getting a first impression of the framework.
 
         \subsection{Setting up \& testing Flink}
 
-            Apache Flink is downloadable from the Apache website \url{https://flink.apache.org}. The installation
+        \textit{Apache Flink}\cite{ApacheFlink} is downloadable from the Apache website \url{https://flink.apache.org}. The installation
             is straight forward and therefore does not need any explanation here, since there is a very good
-            documentation on the Apache Flink website.
+            documentation on the \textit{Apache Flink} website.
 
             % Setting up test environment -> include java code
-            In case of testing the Bloom Filter we decided to use the Bloom Filter by Baqend. Furthermore,
-            we used Debatty as a framwork for LSH. Both functions will be implemented by ourself for our
-            purposes.
+            In case of testing the Bloom Filter we decided to use the Bloom Filter by \textit{Baqend}\cite{Baqend}. Furthermore,
+            we used \textit{Debatty}\cite{Debatty} as a framwork for LSH. Both functions will be implemented by ourself, since
+            our purposes will be different.
 
         \subsection{Dataset}
 
             % test data from Sehili        
             % hadoop hdfs
 
-            The \textit{North Carolina Voter Registratin Databse} \url{http://dl.ncsbe.gov}
+        The \textit{North Carolina Voter Registratin Databse}\cite{NorthCarolinaVoterRegistration}
             supports our puposes to test
-            first implementations of the Bloom-Filter and the LSH. This Dataset is one of the few
-            which includes real names, addresses as well as age. Since we want to encrypt this data
-            it is highly important that we use such data for our purposes.
+            simple implementations of the Bloom-Filter and the LSH. This Dataset is one of the few
+            which includes real names, addresses, as well as the age of these people. Since we want to encrypt this data
+            it is highly important that we use such data for PPRL with Flink.
 
-            Furthermore, the use of a DataCorruptor constructing subsets of the dataset as well as
-            modifying data is preferable. Implementing the corruptor in Java (transormation from python to java)
-            is therefore another issue of our work (see implementation-section).
+            Furthermore, the use of a \textit{DataCorruptor} constructing subsets of the dataset as well as
+            modifying data is preferable. Implementing a corruptor as described in \cite{DataCorruptor}, and thus transforming
+            it into Java is another issue of our goal on PPRL with Flink.
 
             % short explanatin of both datasets -> which data is relevant? -> .txt and .vcs data
 
@@ -113,12 +113,12 @@
         Having reduced the N-Grams of one record, Bloom-Filter will be calculated subsequently.
 
         The Linkage Unit will then block these records and create blocks of Candidate-Record-Pairs
-        using LSH-MinHash-function. That means that the FlatMap and Reduce functions will be used in
+        using a LSH-MinHash-function. That means that the FlatMap and Reduce functions will be used in
         the order 'FlatMap->FlatMap->Reduce'.
-        For the first Linkage in the Linkage Unit all Candidates-Record-Pairs of one block are
+        That means, the first Linkage in the Linkage Unit all Candidates-Record-Pairs of one block are
         being compared with the help of the FlatMap function.
         The second linkage will compare all Candidates-Record-Pairs of a block using the
-        FlatMap function as well. The final third linkage will then compare all
+        FlatMap function as well. The final and third linkage will then compare all
         Candidates-Record-Pairs of a block using the Reduce-function.
         Finally, the results are stored for further examitnation by the data owners.
 
@@ -126,7 +126,7 @@
 %\end{lstlisting}
 
 
-        %\bibliographystyle{plain}
-        %\bibliography{library}
+        \bibliographystyle{plain}
+        \bibliography{library}
 
 \end{document}
