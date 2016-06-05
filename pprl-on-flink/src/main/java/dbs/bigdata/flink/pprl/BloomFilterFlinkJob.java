@@ -1,17 +1,10 @@
 package dbs.bigdata.flink.pprl;
 
-import java.util.BitSet;
-
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.FlatMapOperator;
-import org.apache.flink.api.java.operators.ReduceOperator;
+import org.apache.flink.api.java.operators.GroupReduceOperator;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple5;
-
-import info.debatty.java.lsh.LSHMinHash;
-import info.debatty.java.lsh.MinHash;
-import orestes.bloomfilter.BloomFilter;
-import orestes.bloomfilter.FilterBuilder;
 
 /**
  * The Flink job for building the bloom filters.
@@ -43,62 +36,40 @@ public class BloomFilterFlinkJob {
 		FlatMapOperator<Tuple5<String, String, String, String, String>, Tuple2<String, String>> tokens = 
 				personLoader.getAllData().flatMap(new NGramTokenizer(nGramValue));
 		
+		// tokens.print();
+		
+		final int bloomFilterSize = 1000;
+		final int bloomFilterHashes = 4;
+		
+		// group tokens by id and then reduce each group by adding the tokens into a bloom filter
+		GroupReduceOperator<Tuple2<String, String>, Tuple2<String, BloomFilter>> bfs = 
+				tokens.groupBy(0).reduceGroup(new TokenToBloomFilterGroupReducer(bloomFilterSize, bloomFilterHashes));
+		
+		bfs.print();
+		
+		/*
+		 * Alternative:
+		 * 	- map each token (n-gram) to a BloomFilter
+		 *  - then merge the bloom filters for the same id
+		 *  - but: probably it is faster to add elements to single bloom filter then
+		 *    create x bloom filters and then merge them (set bits vs. search x times the set bit positions)
+		 *  
+		*//*
+		// map n-grams to BloomFilter
+		FlatMapOperator<Tuple2<String, String>, Tuple2<String, BloomFilter>> tokensInBloomFilter =
+				tokens.flatMap(new TokenToBloomFilterMapper(bloomFilterSize, bloomFilterHashes));
+		
+		tokensInBloomFilter.print();
+		
 		// merge the n-grams for the same record
-		ReduceOperator<Tuple2<String, String>> reducedTokensById = tokens.groupBy(0).reduce(new NGramReducer());
-		reducedTokensById.print();		
-
-		// testing bloom filter implementation
-		int expectedElements = 3;
-		double falsePositiveRate = 0.1;
+		ReduceOperator<Tuple2<String, BloomFilter>> reducedTokensBfById = 
+			tokensInBloomFilter.groupBy(0).reduce(new BloomFilterReducer());
 		
-		FilterBuilder filterBuilder = new FilterBuilder(expectedElements, falsePositiveRate);
-		BloomFilter<String> bloomFilter = filterBuilder.buildBloomFilter();
-		
-		bloomFilter.add("test");
-		System.out.println(bloomFilter.asString());
-		
-		bloomFilter.add("test2");
-		System.out.println(bloomFilter.asString());
-		
-		BloomFilter<String> otherBloomFilter = filterBuilder.buildBloomFilter();
-		
-		otherBloomFilter.add("test");
-		
-		otherBloomFilter.add("te-t2");
-		
-		// TODO add (map) n-grams of each record to a bloom filter
+		reducedTokensBfById.print();		
+		*/
 		
 		// TODO build blocks (use LSH for this) of bloom filters, where matches are supposed (flat map/reduce)
-		
-		int stages = 2;
-		int buckets = 2;
-		int dictionarySize = bloomFilter.getSize(); 
-		
-		
-		double similarityError = 0.1;
-		MinHash minhash = new MinHash(similarityError, dictionarySize);
-		
-		BitSet bloomFilterBitSet = bloomFilter.getBitSet();
-		
-		boolean[] vector1 = new boolean[bloomFilterBitSet.length()];
-		for (int i = 0; i < bloomFilterBitSet.length(); i++){
-			vector1[i] = bloomFilterBitSet.get(i);
-		}
-		
-		BitSet otherBloomFilterBitSet = otherBloomFilter.getBitSet();
-		
-		boolean[] vector2 = new boolean[bloomFilterBitSet.length()];
-		for (int i = 0; i < otherBloomFilterBitSet.length(); i++){
-			vector2[i] = otherBloomFilterBitSet.get(i);
-		}
-		
-		int[] sig1 = minhash.signature(vector1);
-		int[] sig2 = minhash.signature(vector2);
-		 
-		//System.out.println("Signature similarity: " + minhash.similarity(sig1, sig2));
-		//LSHMinHash lsh = new LSHMinHash(stages, buckets, dictionarySize);
-		
-		
+			
 		
 		// TODO compare candidate bloom filter pairs of the same block and return similarity values (flat map)
 		
@@ -107,4 +78,4 @@ public class BloomFilterFlinkJob {
 		
 		// TODO maybe send or save the "matching pairs" to the partiespg or a file 
 	}
-}
+}	
