@@ -7,7 +7,7 @@ import org.apache.flink.util.Collector;
 import dbs.bigdata.flink.pprl.utils.BloomFilter;
 
 /**
- * Map each token into a bloom filter
+ * Map each token into a bloom filter.
  * 
  * @author mfranke
  *

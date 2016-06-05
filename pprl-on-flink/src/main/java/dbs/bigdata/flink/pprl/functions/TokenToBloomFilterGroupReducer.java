@@ -7,7 +7,7 @@ import org.apache.flink.util.Collector;
 import dbs.bigdata.flink.pprl.utils.BloomFilter;
 
 /**
- * Reduce tokens of the same group by adding to a bloom filter
+ * Reduce tokens of the same group by adding to a bloom filter.
  * 
  * @author mfranke
  *

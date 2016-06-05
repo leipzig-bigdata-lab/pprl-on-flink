@@ -7,6 +7,14 @@ import org.apache.flink.util.Collector;
 import dbs.bigdata.flink.pprl.utils.BloomFilter;
 import dbs.bigdata.flink.pprl.utils.Lsh;
 
+/**
+ * Class for building blocks from the bloom filter.
+ * Therefore the LshBlocker hashes pieces of the bloom filter
+ * and generates a block id. 
+ * 
+ * @author mfranke
+ *
+ */
 public class LshBlocker 
 	implements FlatMapFunction<Tuple2<String, BloomFilter>, Tuple3<String, BloomFilter, Integer>> {
 

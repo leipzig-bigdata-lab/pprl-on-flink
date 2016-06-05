@@ -3,6 +3,16 @@ package dbs.bigdata.flink.pprl.data;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 
+/**
+ * Abstract class to extend to load various data from 
+ * a source file.
+ * 
+ * @author mfranke
+ *
+ * @param <T>
+ * 		-> Type of Object you want to load from a file.
+ * 
+ */
 public abstract class DataLoader<T extends Object> {
 	
 	protected ExecutionEnvironment env;

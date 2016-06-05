@@ -1,5 +1,10 @@
 package dbs.bigdata.flink.pprl.data;
 
+/**
+ * Class for representing a person with various quasi identifier attributes. 
+ * 
+ * @author mfranke
+ */
 public class Person {
 
 	private String id;

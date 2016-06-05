@@ -5,6 +5,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.BitSet;
 
+/**
+ * Use this class for generate the md5 oder sha hashes of
+ * strings or bit sets.
+ * 
+ * @author mfranke
+ */
 public class HashUtils {
 	public static int getMD5(String input) {
 		try {

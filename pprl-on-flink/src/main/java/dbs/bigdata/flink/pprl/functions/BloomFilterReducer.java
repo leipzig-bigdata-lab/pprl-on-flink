@@ -6,7 +6,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import dbs.bigdata.flink.pprl.utils.BloomFilter;
 
 /**
- * Class for merging bloom filters for the same id.
+ * Class for merging bloom filters with the same id.
  * 
  * @author mfranke
  */

@@ -4,6 +4,12 @@ import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple5;
 
+/**
+ * Class for reading simple test data.
+ * 
+ * @author mfranke
+ *
+ */
 public class PersonDataLoader extends DataLoader<Tuple5<String, String, String, String, String>>{
 
 	public PersonDataLoader(ExecutionEnvironment env) {

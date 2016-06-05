@@ -7,6 +7,10 @@ import org.junit.Test;
 
 import dbs.bigdata.flink.pprl.utils.BloomFilter;
 
+/**
+ * Class for testing our BloonFilter implementation;
+ * @author mfranke
+ */
 public class BloomFilterTest {
 
 	private BloomFilter bloomFilter;

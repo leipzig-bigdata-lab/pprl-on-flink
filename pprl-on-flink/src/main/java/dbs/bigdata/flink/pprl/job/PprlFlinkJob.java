@@ -21,15 +21,10 @@ import dbs.bigdata.flink.pprl.utils.BloomFilter;
  */
 public class PprlFlinkJob {
 
-	public static final String PATH_TO_DATA_FILE = "persons";
-	public static final String LINE_DELIMITER = "##//##";
-	public static final String FIELD_DELIMITER = "#|#";
-	
 	public static void main(String[] args) throws Exception {
 		// set up the execution environment
 		final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-		
-		
+			
 		VoterDataLoader voterLoader = new VoterDataLoader(env);
 		DataSet<Person> voterData = voterLoader.getAllData();
 		
