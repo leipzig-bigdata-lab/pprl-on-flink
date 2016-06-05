@@ -1,8 +1,10 @@
-package dbs.bigdata.flink.pprl;
+package dbs.bigdata.flink.pprl.functions;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.util.Collector;
+
+import dbs.bigdata.flink.pprl.utils.BloomFilter;
 
 /**
  * Map each token into a bloom filter

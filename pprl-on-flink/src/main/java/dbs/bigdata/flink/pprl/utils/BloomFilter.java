@@ -1,4 +1,4 @@
-package dbs.bigdata.flink.pprl;
+package dbs.bigdata.flink.pprl.utils;
 
 import java.util.BitSet;
 
@@ -17,6 +17,10 @@ public class BloomFilter {
 	private final int size;
 	private final int hashFunctions;
 	private BitSet bitset;
+	
+	public BloomFilter(){
+		this(0,0,new BitSet());
+	};
 	
 	/**
 	 * Creates a new Bloom filter.
@@ -63,17 +67,6 @@ public class BloomFilter {
 		return Math.abs(HashUtils.getSHA(element));
 	}
 	
-	public int getSize(){
-		return this.size;
-	}
-	
-	public int getNumberOfHashFunctions(){
-		return this.hashFunctions;
-	}
-	
-	public BitSet getBitSet(){
-		return this.bitset;
-	}
 	
 	/**
 	 * Sets all bits to zero.
@@ -156,6 +149,22 @@ public class BloomFilter {
 			return false;
 		}
 		return true;
+	}
+
+	public BitSet getBitset() {
+		return bitset;
+	}
+
+	public void setBitset(BitSet bitset) {
+		this.bitset = bitset;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public int getHashFunctions() {
+		return hashFunctions;
 	}
 
 }

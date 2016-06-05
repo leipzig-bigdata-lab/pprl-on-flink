@@ -1,7 +1,9 @@
-package dbs.bigdata.flink.pprl;
+package dbs.bigdata.flink.pprl.functions;
 
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
+
+import dbs.bigdata.flink.pprl.utils.BloomFilter;
 
 /**
  * Class for merging bloom filters for the same id.

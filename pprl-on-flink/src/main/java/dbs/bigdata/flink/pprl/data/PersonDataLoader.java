@@ -1,4 +1,4 @@
-package dbs.bigdata.flink.pprl;
+package dbs.bigdata.flink.pprl.data;
 
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
@@ -8,7 +8,7 @@ public class PersonDataLoader extends DataLoader<Tuple5<String, String, String, 
 
 	public PersonDataLoader(ExecutionEnvironment env) {
 		super (env);
-		this.dataFilePath = "persons";
+		this.dataFilePath = "persons.txt";
 		this.lineDelimiter = "##//##";
 		this.fieldDelimiter = "#|#";
 	}

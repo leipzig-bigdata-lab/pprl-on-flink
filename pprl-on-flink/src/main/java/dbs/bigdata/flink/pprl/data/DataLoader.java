@@ -1,10 +1,9 @@
-package dbs.bigdata.flink.pprl;
+package dbs.bigdata.flink.pprl.data;
 
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
-import org.apache.flink.api.java.tuple.Tuple;
 
-public abstract class DataLoader<T extends Tuple> {
+public abstract class DataLoader<T extends Object> {
 	
 	protected ExecutionEnvironment env;
 	protected String dataFilePath;

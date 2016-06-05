@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import dbs.bigdata.flink.pprl.utils.BloomFilter;
+
 public class BloomFilterTest {
 
 	private BloomFilter bloomFilter;
@@ -18,10 +20,10 @@ public class BloomFilterTest {
 	
 	@Test
 	public void testAddElement(){
-		assertTrue(this.bloomFilter.getBitSet().isEmpty());
+		assertTrue(this.bloomFilter.getBitset().isEmpty());
 		int[] positions = this.bloomFilter.addElement("test");
-		assertFalse(this.bloomFilter.getBitSet().isEmpty());
-		assertEquals(positions.length, this.bloomFilter.getNumberOfHashFunctions());
+		assertFalse(this.bloomFilter.getBitset().isEmpty());
+		assertEquals(positions.length, this.bloomFilter.getHashFunctions());
 	}
 	
 	@Test
