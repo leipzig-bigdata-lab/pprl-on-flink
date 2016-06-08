@@ -1,4 +1,4 @@
-county_cd	first_name	last_name	middle_name	name_suffix_lbl	res_addr1	res_addr2	res_state	res_city	res_zip	res_zip4	race_cd	ethnic_cd	gender_cd	age	party_cd	dmv_timestamp
 DURHA	DEMARCO             	HARRIS                   	DONTEZ              	 	1309 HUDSON AVE          	APT B15                  	NC	DURHAM                	27705	3372	B	NL	M	23	DEM	2015-12-14
 MECKL	VIOLENA             	WORK                     	ALIVNETTA           	 	1424 PRESSLEY RD         	APT 7                    	NC	CHARLOTTE             	28217	0934	B	NL	F	40	DEM	2015-12-15
 PASQU	WILLIAM             	BONDS                    	JAMES               	 	1403 RIVER RD            	LOT 153                  	NC	ELIZABETH CITY        	27909	6721	B	UN	M	52	DEM	2015-12-15
+PASQU	WILLIAM            	 	BONDS                    	JAMES               	 	1403 RIVER RD            	LOT 153                  	NC	ELISABETH CITY        	27909	6721	B	UN	M	52	DEM	2015-12-15

@@ -1,6 +1,7 @@
 package dbs.bigdata.flink.pprl.functions;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -18,7 +19,6 @@ public class NGramTokenizer
 
 	private static final long serialVersionUID = -8819111750339989196L;
 	private int ngram;
-	private static int idCounter;
 	
 	/**
 	 * @param ngram
@@ -29,7 +29,6 @@ public class NGramTokenizer
 	public NGramTokenizer(int ngram) throws Exception{
 		if (ngram >= 1){
 			this.ngram = ngram;
-			idCounter = 0;
 		}
 		else{
 			throw new Exception();
@@ -39,6 +38,8 @@ public class NGramTokenizer
 	@Override
 	public void flatMap(Person value, Collector<Tuple2<String, String>> out)
 			throws Exception {
+		
+	
 		String qids = value.getConcatenatedAttributes();
 		
 		// normalize
@@ -57,12 +58,17 @@ public class NGramTokenizer
 			tokens.add(token);
 			token = "";
 		}
+		
+		String id = value.getId();
+		if (id == null || id.equals("")){
+			Random rnd = new Random();
+			id = String.valueOf(Math.abs(rnd.nextLong()));
+		}
 
 		// emit the pairs
 		for (int tokenPointer = 0; tokenPointer < tokens.size(); tokenPointer++){
-			out.collect(new Tuple2<String, String>(String.valueOf(idCounter), tokens.get(tokenPointer)));
+			out.collect(new Tuple2<String, String>(id, tokens.get(tokenPointer)));
 		}
-		idCounter++;
 	}
 	
 	public int getNGramValue(){
@@ -71,9 +77,5 @@ public class NGramTokenizer
 	
 	public void setNGramValue(int ngram){
 		this.ngram = ngram;
-	}
-	
-	public static void resetIdCounter(){
-		idCounter = 0;
 	}
 }

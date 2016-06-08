@@ -26,7 +26,7 @@ public class VoterDataLoader extends DataLoader<Person>{
 				this.env.readCsvFile(this.dataFilePath)
 				.lineDelimiter(this.lineDelimiter)
 				.fieldDelimiter(this.fieldDelimiter)
-				.ignoreFirstLine()
+				//.ignoreFirstLine()
 				.includeFields("0110011111000110")
 				.pojoType(Person.class, "firstName", "lastName", "addressPartOne", "addressPartTwo", "state",
 						"city", "zip", "genderCode", "age");

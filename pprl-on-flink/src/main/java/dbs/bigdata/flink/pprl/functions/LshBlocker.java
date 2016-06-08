@@ -32,8 +32,8 @@ public class LshBlocker
 	}
 	
 	@Override
-	public void flatMap(Tuple2<String, BloomFilter> value, Collector<Tuple3<String, BloomFilter, Integer>> out)
-			throws Exception {
+	public void flatMap(Tuple2<String, BloomFilter> value, 
+			Collector<Tuple3<String, BloomFilter, Integer>> out) throws Exception {
 			
 		Lsh lsh = new Lsh(this.hashFunctions, value.f1, this.blockCount, this.partitionSize);
 		int[] block = lsh.getBlocks();

@@ -18,6 +18,13 @@ public class Person {
 	private String genderCode;
 	private String age;
 	
+	/*
+	 * if needed add more elements here
+	 * private String birthday;
+	 * private String street;
+	 * ...
+	 */
+	
 	public Person(){}
 		
 	public Person(String id, String firstName, String lastName, String addressPartOne, String addressPartTwo, String state,

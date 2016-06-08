@@ -8,7 +8,8 @@ import java.util.BitSet;
  */
 public class Lsh {
 	
-	private int hashFunctions;
+	@SuppressWarnings("unused")
+	private int hashFunctions; // can be removed if not needed
 	private BloomFilter bloomFilter;
 	private int blockCount;
 	private int partitionSize;
@@ -42,6 +43,7 @@ public class Lsh {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private int hash1(BitSet bits){
 		return Math.abs(HashUtils.getMD5(bits));
 	}
@@ -51,16 +53,18 @@ public class Lsh {
 	}
 
 	public int[] getBlocks() {
-		int[] blocks = new int[this.partitionSize * this.hashFunctions];
-		int pointer = 0;
+		int[] blocks = new int[this.partitionSize];
+		int blockPointer = 0;
 		
+		// divide the bloom filter in subsets of partitionSize
 		BitSet[] subset = this.getSubsetsFromBloomFilter();
-		for (int i = 0; i < subset.length; i++){
-			for (int j = 0; j < this.hashFunctions; j++){
-				blocks[pointer++] = (Math.abs(this.hash1(subset[i]) + j * this.hash2(subset[i]))) % blockCount;
-			}
-		}
 		
+		// hash each subset into blockCount blocks
+		// the hash value builds the block number and is independent for the subsets
+		for (int i = 0; i < subset.length; i++){
+				blocks[blockPointer++] = 
+						(Math.abs(this.hash2(subset[i])) %  blockCount) + (blockCount * i);
+		}
 		
 		return blocks;
 	}
@@ -69,13 +73,13 @@ public class Lsh {
 		BitSet bitset = this.bloomFilter.getBitset();
 		int bitsetSize = bitset.size();
 		int start = 0;
-		int subsetSize = bitsetSize / this.blockCount;
+		int subsetSize = bitsetSize / this.partitionSize;
 		
 		BitSet[] subsets = new BitSet[this.partitionSize];
 		
 		for (int i = 0; i < subsets.length; i++){
 			int end;
-			if (i == this.hashFunctions - 1){
+			if (i == subsets.length - 1){
 				end = bitsetSize;
 			}
 			else{
