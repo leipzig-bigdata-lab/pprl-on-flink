@@ -113,10 +113,10 @@
         Having reduced the N-Grams of one record, Bloom-Filter will be calculated subsequently.
 
         The Linkage Unit will then block these records and create blocks of Candidate-Record-Pairs
-        using a LSH-MinHash-function. That means that the FlatMap and Reduce functions will be used in
+        using a LSH-MinHash-function using subkeys. That means that the FlatMap and Reduce functions will be used in
         the order 'FlatMap->FlatMap->Reduce'.
-        That means, the first Linkage in the Linkage Unit all Candidates-Record-Pairs of one block are
-        being compared with the help of the FlatMap function.
+        In the first Linkage in the Linkage Unit all Candidates-Record-Pairs of one block are
+        compared with the help of the FlatMap function.
         The second linkage will compare all Candidates-Record-Pairs of a block using the
         FlatMap function as well. The final and third linkage will then compare all
         Candidates-Record-Pairs of a block using the Reduce-function.
@@ -125,6 +125,7 @@
 %\begin{lstlisting}
 %\end{lstlisting}
 
+        \newpage
 
         \bibliographystyle{plain}
         \bibliography{library}
