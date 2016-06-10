@@ -18,16 +18,35 @@ public class BlockReducer implements GroupReduceFunction<Tuple3<String, BloomFil
 			Collector<Tuple4<String, String, BloomFilter, BloomFilter>> out) throws Exception {
 		
 		ArrayList<Tuple3<String, BloomFilter, Integer>> valueList = this.getValuesInList(values);
+		
+		ArrayList<Tuple4<String, String, BloomFilter, BloomFilter>> resultList = 
+				new ArrayList<Tuple4<String, String, BloomFilter, BloomFilter>>();
+		
+		ArrayList<Tuple2<String, String>> pairIds = new ArrayList<Tuple2<String, String>>();
+		
 		for (Tuple3<String, BloomFilter, Integer> value : valueList){
 			for (Tuple3<String, BloomFilter, Integer> otherValue : valueList){
+				
 				if (!value.f0.equals(otherValue.f0)){
-					out.collect(
-						new Tuple4<String, String, BloomFilter, BloomFilter>(
+					if (!pairIds.contains(new Tuple2<String, String>(value.f0, otherValue.f0))){
+						resultList.add(
+							new Tuple4<String, String, BloomFilter, BloomFilter>(
 								value.f0, otherValue.f0, value.f1,  otherValue.f1
-						)
-					);
+							)
+						);
+						pairIds.add(
+							new Tuple2<String, String>(value.f0, otherValue.f0)
+						);
+						pairIds.add(
+								new Tuple2<String, String>(otherValue.f0, value.f0)
+						);
+					}
 				}
 			}
+		}
+		
+		for (Tuple4<String, String, BloomFilter, BloomFilter> result : resultList){
+			out.collect(result);
 		}
 	}
 	

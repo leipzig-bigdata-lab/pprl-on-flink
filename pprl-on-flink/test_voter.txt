@@ -1,4 +1,9 @@
+DURHA	MEMARCO             	HARRIS                   	DONTEZ              	 	1309 HUDSON AVE          	APT B15                  	NC	DURHAM                	27705	3372	B	NL	M	23	DEM	2015-12-14
 DURHA	DEMARCO             	HARRIS                   	DONTEZ              	 	1309 HUDSON AVE          	APT B15                  	NC	DURHAM                	27705	3372	B	NL	M	23	DEM	2015-12-14
-MECKL	VIOLENA             	WORK                     	ALIVNETTA           	 	1424 PRESSLEY RD         	APT 7                    	NC	CHARLOTTE             	28217	0934	B	NL	F	40	DEM	2015-12-15
-PASQU	WILLIAM             	BONDS                    	JAMES               	 	1403 RIVER RD            	LOT 153                  	NC	ELIZABETH CITY        	27909	6721	B	UN	M	52	DEM	2015-12-15
-PASQU	WILLIAM            	 	BONDS                    	JAMES               	 	1403 RIVER RD            	LOT 153                  	NC	ELISABETH CITY        	27909	6721	B	UN	M	52	DEM	2015-12-15
+WILSO	PEGGY               	TINGLE                   	                    	 	1008 CORBETT AVE NE      	                         	NC	WILSON                	27893	1912	B	NL	F	64	UNA	2016-01-04
+HALIF	THERESA             	PITTMAN                  	DIANNE              	 	417 E FRANKLIN ST        	                         	NC	ENFIELD               	27823	1223	B	NL	F	59	REP	2016-01-06
+MARTI	MARGARET            	PEARSON                  	JOHNSON             	 	401 ROBERSON ST          	                         	NC	WILLIAMSTON           	27892	1525	B	NL	F	61	DEM	2016-01-06
+DAVID	AMANDA              	POOLE                    	ELIZABETH           	 	684 LEONARD RD           	                         	NC	LEXINGTON             	27295	1221	W	NL	F	30	REP	2016-01-06
+FORSY	FREDDRICK           	KING-EVANS               	GREGORY             	 	3909 BURTIS ST           	                         	NC	WINSTON SALEM         	27105	3506	B	NL	M	18	DEM	2016-01-06
+GUILF	GRADY               	WILLIAMS                 	                    	III	821 AVALON RD            	                         	NC	GREENSBORO            	27401	4320	B	NL	M	52	DEM	2016-01-06
+MARTI	MARGARETT            	PEARSON                  	JOHNSON             	 	401 ROBERSON ST          	                         	NC	WILLIAMSTON           	27892	1525	B	NL	F	61	DEM	2016-01-06

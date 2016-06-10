@@ -120,6 +120,21 @@ public class BloomFilter {
 		}
 	}
 	
+	public BloomFilter or(BloomFilter other){
+		return this.merge(other);
+	}
+	
+	public BloomFilter and(BloomFilter other){
+		if (this.size == other.size && other.bitset != null){
+			BitSet bitset = (BitSet) this.bitset.clone();
+			bitset.and(other.bitset);
+			return new BloomFilter(this.size, this.hashFunctions, bitset);
+		}
+		else{
+			return null;
+		}
+	}
+	
 	@Override
 	public String toString(){
 		return this.bitset.toString();

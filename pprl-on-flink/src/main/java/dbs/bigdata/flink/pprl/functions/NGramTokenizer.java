@@ -1,7 +1,6 @@
 package dbs.bigdata.flink.pprl.functions;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -38,7 +37,6 @@ public class NGramTokenizer
 	@Override
 	public void flatMap(Person value, Collector<Tuple2<String, String>> out)
 			throws Exception {
-		
 	
 		String qids = value.getConcatenatedAttributes();
 		
@@ -59,15 +57,9 @@ public class NGramTokenizer
 			token = "";
 		}
 		
-		String id = value.getId();
-		if (id == null || id.equals("")){
-			Random rnd = new Random();
-			id = String.valueOf(Math.abs(rnd.nextLong()));
-		}
-
 		// emit the pairs
 		for (int tokenPointer = 0; tokenPointer < tokens.size(); tokenPointer++){
-			out.collect(new Tuple2<String, String>(id, tokens.get(tokenPointer)));
+			out.collect(new Tuple2<String, String>(value.getId(), tokens.get(tokenPointer)));
 		}
 	}
 	
