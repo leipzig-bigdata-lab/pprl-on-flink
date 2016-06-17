@@ -36,6 +36,18 @@ public class HashUtils {
 		}
 	}
 	
+	public static long getSHA1(String input){
+		try{
+			MessageDigest md = MessageDigest.getInstance("SHA1");
+			byte[] messageDigest = md.digest(input.getBytes());            
+			BigInteger number = new BigInteger(1, messageDigest);
+			return number.longValue();
+		}
+		catch (NoSuchAlgorithmException e){
+			throw new RuntimeException(e);
+		}
+	}
+	
 	public static int getMD5(BitSet input) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");

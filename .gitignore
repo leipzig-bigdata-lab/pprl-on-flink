@@ -1,4 +1,5 @@
 pprl-on-flink/target/
+pprl-on-flink/*.csv
 .DS_Store
 *.aux
 *.fdb_latexmk

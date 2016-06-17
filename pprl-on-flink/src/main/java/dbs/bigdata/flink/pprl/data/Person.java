@@ -1,5 +1,7 @@
 package dbs.bigdata.flink.pprl.data;
 
+import dbs.bigdata.flink.pprl.utils.HashUtils;
+
 /**
  * Class for representing a person with various quasi identifier attributes. 
  * 
@@ -142,6 +144,132 @@ public class Person {
 		builder.append(age);
 		builder.append("]");
 		return builder.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((addressPartOne == null) ? 0 : addressPartOne.hashCode());
+		result = prime * result + ((addressPartTwo == null) ? 0 : addressPartTwo.hashCode());
+		result = prime * result + ((age == null) ? 0 : age.hashCode());
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((genderCode == null) ? 0 : genderCode.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((state == null) ? 0 : state.hashCode());
+		result = prime * result + ((zip == null) ? 0 : zip.hashCode());
+		return result;
+	}
+	
+	public long hash(){
+		StringBuilder builder = new StringBuilder();
+		builder.append(firstName);
+		builder.append(lastName);
+		builder.append(addressPartOne);
+		builder.append(addressPartTwo);
+		builder.append(state);
+		builder.append(city);
+		builder.append(zip);
+		builder.append(genderCode);
+		builder.append(age);
+		return HashUtils.getSHA1(builder.toString());
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Person other = (Person) obj;
+		if (addressPartOne == null) {
+			if (other.addressPartOne != null) {
+				return false;
+			}
+		} 
+		else if (!addressPartOne.equals(other.addressPartOne)) {
+			return false;
+		}
+		if (addressPartTwo == null) {
+			if (other.addressPartTwo != null) {
+				return false;
+			}
+		} 
+		else if (!addressPartTwo.equals(other.addressPartTwo)) {
+			return false;
+		}
+		if (age == null) {
+			if (other.age != null) {
+				return false;
+			}
+		} 
+		else if (!age.equals(other.age)) {
+			return false;
+		}
+		if (city == null) {
+			if (other.city != null) {
+				return false;
+			}
+		} 
+		else if (!city.equals(other.city)) {
+			return false;
+		}
+		if (firstName == null) {
+			if (other.firstName != null) {
+				return false;
+			}
+		} 
+		else if (!firstName.equals(other.firstName)) {
+			return false;
+		}
+		if (genderCode == null) {
+			if (other.genderCode != null) {
+				return false;
+			}
+		} 
+		else if (!genderCode.equals(other.genderCode)) {
+			return false;
+		}
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} 
+		else if (!id.equals(other.id)) {
+			return false;
+		}
+		if (lastName == null) {
+			if (other.lastName != null) {
+				return false;
+			}
+		} 
+		else if (!lastName.equals(other.lastName)) {
+			return false;
+		}
+		if (state == null) {
+			if (other.state != null) {
+				return false;
+			}
+		} 
+		else if (!state.equals(other.state)) {
+			return false;
+		}
+		if (zip == null) {
+			if (other.zip != null) {
+				return false;
+			}
+		} 
+		else if (!zip.equals(other.zip)) {
+			return false;
+		}
+		return true;
 	}
 
 }

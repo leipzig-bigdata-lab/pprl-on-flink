@@ -37,14 +37,19 @@ public class PprlFlinkJob {
 		
 		
 		VoterDataLoader voterLoader = new VoterDataLoader(env);
-		DataSet<Person> voterData = voterLoader.getAllData();
+		DataSet<Person> voterDataOrg = voterLoader.getAllData();
+		// add ids
+		voterDataOrg = voterDataOrg.map(new AddIdMapper("1:"));
+		
+		DataSet<Person> voterDataDup = voterLoader.getAllDataFromSecondFile();
+		// add ids
+		voterDataDup = voterDataDup.map(new AddIdMapper("2:"));
 		
 		
-		// add id
-		voterData = voterData.map(new AddIdMapper("1:"));
-		//voterData.print();
+		DataSet<Person> voterData = voterDataOrg.union(voterDataDup);
+		voterData.print();
 		
-		
+		///*
 		// build the n-grams
 		final int nGramValue = 5;
 		FlatMapOperator<Person, Tuple2<String, String>> tokens = 
@@ -85,7 +90,7 @@ public class PprlFlinkJob {
 		
 		// build blocks (use LSH for this) of bloom filters, where matches are supposed)
 		// TODO: rework lsh procedure (use "zehili procedure")
-		
+		///*
 		final int lshHashFunctions = 4;
 		final int blockCount = 10;
 		final int partitionSize = 20;
@@ -122,7 +127,7 @@ public class PprlFlinkJob {
 		matchingPairs.print();
 		
 		// TODO maybe send or save the "matching pairs" to the parties or a file 
-		
+		//*/
 	}
 	
 }	

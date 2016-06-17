@@ -1,9 +1,13 @@
-DURHA	MEMARCO             	HARRIS                   	DONTEZ              	 	1309 HUDSON AVE          	APT B15                  	NC	DURHAM                	27705	3372	B	NL	M	23	DEM	2015-12-14
 DURHA	DEMARCO             	HARRIS                   	DONTEZ              	 	1309 HUDSON AVE          	APT B15                  	NC	DURHAM                	27705	3372	B	NL	M	23	DEM	2015-12-14
 WILSO	PEGGY               	TINGLE                   	                    	 	1008 CORBETT AVE NE      	                         	NC	WILSON                	27893	1912	B	NL	F	64	UNA	2016-01-04
 HALIF	THERESA             	PITTMAN                  	DIANNE              	 	417 E FRANKLIN ST        	                         	NC	ENFIELD               	27823	1223	B	NL	F	59	REP	2016-01-06
 MARTI	MARGARET            	PEARSON                  	JOHNSON             	 	401 ROBERSON ST          	                         	NC	WILLIAMSTON           	27892	1525	B	NL	F	61	DEM	2016-01-06
 DAVID	AMANDA              	POOLE                    	ELIZABETH           	 	684 LEONARD RD           	                         	NC	LEXINGTON             	27295	1221	W	NL	F	30	REP	2016-01-06
 FORSY	FREDDRICK           	KING-EVANS               	GREGORY             	 	3909 BURTIS ST           	                         	NC	WINSTON SALEM         	27105	3506	B	NL	M	18	DEM	2016-01-06
-GUILF	GRADY               	WILLIAMS                 	                    	III	821 AVALON RD            	                         	NC	GREENSBORO            	27401	4320	B	NL	M	52	DEM	2016-01-06
-MARTI	MARGARETT            	PEARSON                  	JOHNSON             	 	401 ROBERSON ST          	                         	NC	WILLIAMSTON           	27892	1525	B	NL	F	61	DEM	2016-01-06
+SURRY	KELLY               	HAIRSTON                 	GENENE              	 	121 FOREST HILLS LN      	                         	NC	ELKIN                 	28621	8307	B	UN	F	30	DEM	2014-10-30
+NEW H	LEO                 	WILDER                   	PINKNEY             	 	1202 CHESTNUT ST         	APT A                    	NC	WILMINGTON            	28401	4322	B	NL	M	67	DEM	2014-10-30
+ORANG	MARY                	WEYANT                   	ELIZABETH           	 	2202 RHONDA RD           	                         	NC	HILLSBOROUGH          	27278	7087	W	NL	F	57	DEM	2014-10-31
+SCOTL	DANA                	MORIN                    	MICHELLE            	 	22180 POLAR BRIDGE RD    	                         	NC	LAUREL HILL           	28351	8564	W	NL	F	34	REP	2014-10-31
+WILSO	STEVEN              	COMO                     	DAVID               	 	102C PARKVIEW ST W       	                         	NC	WILSON                	27893	3640	W	UN	M	58	LIB	2014-10-27
+CLEVE	SHANIYA             	WEBBER                   	KYANN               	 	229 CHESTNUT ST          	APT 3C                   	NC	SHELBY                	28150	5685	B	NL	F	19	UNA	2014-10-27
+BUNCO	LAURA               	FRONTIERRO               	JEANNE              	 	111 BEAR CREEK LN        	APT 6                    	NC	ASHEVILLE             	28806	1650	W	NL	F	37	DEM	2014-10-27
