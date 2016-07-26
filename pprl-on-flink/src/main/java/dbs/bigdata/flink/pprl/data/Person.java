@@ -1,5 +1,6 @@
 package dbs.bigdata.flink.pprl.data;
 
+
 import dbs.bigdata.flink.pprl.utils.HashUtils;
 
 /**
@@ -8,9 +9,25 @@ import dbs.bigdata.flink.pprl.utils.HashUtils;
  * @author mfranke
  */
 public class Person {
-
+	
+	public static final String ID_ATTRIBUTE = "id";
+	public static final String FIRST_NAME_ATTRIBUTE = "firstName";
+	public static final String MIDDLE_NAME_ATTRIBUTE = "middleName";
+	public static final String LAST_NAME_ATTRIBUTE = "lastName";
+	public static final String ADDRESS_PART_ONE_ATTRIBUTE = "addressPartOne";
+	public static final String ADDRESS_PART_TWO_ATTRIBUTE = "addressPartTwo";
+	public static final String STATE_ATTRIBUTE = "state";
+	public static final String CITY_ATTRIBUTE = "city";
+	public static final String ZIP_ATTRIBUTE = "zip";
+	public static final String GENDER_CODE_ATTRIBUTE = "genderCode";
+	public static final String AGE_ATTRIBUTE = "age";
+	public static final String BIRTHDAY_ATTRIBUTE = "birthday";
+	public static final String ETHNIC_CODE_ATTRIBUTE = "ethnicCode";
+	
+	
 	private String id;
 	private String firstName;
+	private String middleName;
 	private String lastName;
 	private String addressPartOne;
 	private String addressPartTwo;
@@ -19,20 +36,64 @@ public class Person {
 	private String zip;
 	private String genderCode;
 	private String age;
-	
-	/*
-	 * if needed add more elements here
-	 * private String birthday;
-	 * private String street;
-	 * ...
-	 */
-	
-	public Person(){}
+	private String birthday;
+	private String ethnicCode;
 		
-	public Person(String id, String firstName, String lastName, String addressPartOne, String addressPartTwo, String state,
-			String city, String zip, String genderCode, String age) {
+	/**
+	 * Creates a new Person object.
+	 */
+	public Person(){
+		this("", "", "", "", "", "", "", "", "", "", "", "", "");
+	}
+		
+	/**
+	 * Creates a new Person object.
+	 * 
+	 * @param id
+	 * 		-> the id of the person.
+	 * 
+	 * @param firstName
+	 * 		-> the first name of the person.
+	 * 
+	 * @param lastName
+	 * 		-> the last name of the person.
+	 * 
+	 * @param middleName
+	 * 		-> the middleName of the person.
+	 * 
+	 * @param addressPartOne
+	 * 		-> the first part of the address of the person.
+	 * 
+	 * @param addressPartTwo
+	 * 		-> the second part of the address of the person.
+	 * 
+	 * @param state
+	 * 		-> the state the person living in.
+	 * 
+	 * @param city
+	 * 		-> the city the person living in.
+	 * 
+	 * @param zip
+	 * 		-> the zip code of the city.
+	 * 
+	 * @param genderCode
+	 * 		-> the genderCode of the person.
+	 * 
+	 * @param age
+	 * 		-> the age of the person.
+	 * 
+	 * @param birthday
+	 * 		-> the birth date of the person.
+	 * 
+	 * @param ethnicCode
+	 * 		-> the ethnic code of the person.
+	 */
+	public Person(String id, String firstName, String lastName, String middleName, String addressPartOne,
+			String addressPartTwo, String state, String city, String zip, String genderCode, String age,
+			String birthday, String ethnicCode) {
 		this.id = id;
 		this.firstName = firstName;
+		this.middleName = middleName;
 		this.lastName = lastName;
 		this.addressPartOne = addressPartOne;
 		this.addressPartTwo = addressPartTwo;
@@ -41,84 +102,159 @@ public class Person {
 		this.zip = zip;
 		this.genderCode = genderCode;
 		this.age = age;
+		this.birthday = birthday;
+		this.ethnicCode = ethnicCode;
 	}
-
-
+	
 	public String getId() {
 		return id;
 	}
+	
 	public void setId(String id) {
 		this.id = id;
 	}
+	
 	public String getFirstName() {
 		return firstName;
 	}
+	
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+	
 	public String getLastName() {
 		return lastName;
 	}
+	
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	
 	public String getAddressPartOne() {
 		return addressPartOne;
 	}
+	
 	public void setAddressPartOne(String addressPartOne) {
 		this.addressPartOne = addressPartOne;
 	}
+	
 	public String getAddressPartTwo() {
 		return addressPartTwo;
 	}
+	
 	public void setAddressPartTwo(String addressPartTwo) {
 		this.addressPartTwo = addressPartTwo;
 	}
+	
 	public String getState() {
 		return state;
 	}
+	
 	public void setState(String state) {
 		this.state = state;
 	}
+	
 	public String getCity() {
 		return city;
 	}
+	
 	public void setCity(String city) {
 		this.city = city;
 	}
+	
 	public String getZip() {
 		return zip;
 	}
+	
 	public void setZip(String zip) {
 		this.zip = zip;
 	}
+	
 	public String getGenderCode() {
 		return genderCode;
 	}
+	
 	public void setGenderCode(String genderCode) {
 		this.genderCode = genderCode;
 	}
+	
 	public String getAge() {
 		return age;
 	}
+
 	public void setAge(String age) {
 		this.age = age;
 	}
 	
-	public String getConcatenatedAttributes(){
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+
+	public String getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getEthnicCode() {
+		return ethnicCode;
+	}
+
+	public void setEthnicCode(String ethnicCode) {
+		this.ethnicCode = ethnicCode;
+	}
+
+	/**
+	 * Concatenates the attributes of the person and return the resulting string.
+	 * 
+	 * @param separator
+	 * 		-> defines a separator to use between the attributes.
+	 * 
+	 * @return
+	 * 		-> string with the concatenated attributes of the person.
+	 */
+	public String getConcatenatedAttributes(String separator){
+		String[] attributes = {
+			firstName,
+			middleName,
+			lastName,
+			addressPartOne,
+			addressPartTwo,
+			state,
+			city,
+			zip,
+			genderCode,
+			age,
+			birthday,
+			ethnicCode
+		};
+		
 		StringBuilder builder = new StringBuilder();
-		builder.append(firstName);
-		builder.append(lastName);
-		builder.append(addressPartOne);
-		builder.append(addressPartTwo);
-		builder.append(state);
-		builder.append(city);
-		builder.append(zip);
-		builder.append(genderCode);
-		builder.append(age);
+		
+		for (String attribute : attributes){
+			builder.append(attribute);
+			builder.append(separator);
+		}
+		builder.delete(builder.length() - separator.length(), builder.length());
+		
 		return builder.toString();	
 	}
 
+	/**
+	 * @return
+	 * 		-> the hash value of the person object.
+	 */
+	public long hash(){
+		return HashUtils.getSHA(this.getConcatenatedAttributes(""));
+	}
+
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -126,6 +262,8 @@ public class Person {
 		builder.append(id);
 		builder.append(", firstName=");
 		builder.append(firstName);
+		builder.append(", middleName=");
+		builder.append(middleName);
 		builder.append(", lastName=");
 		builder.append(lastName);
 		builder.append(", addressPartOne=");
@@ -142,39 +280,12 @@ public class Person {
 		builder.append(genderCode);
 		builder.append(", age=");
 		builder.append(age);
+		builder.append(", birthday=");
+		builder.append(birthday);
+		builder.append(", ethnicCode=");
+		builder.append(ethnicCode);
 		builder.append("]");
 		return builder.toString();
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((addressPartOne == null) ? 0 : addressPartOne.hashCode());
-		result = prime * result + ((addressPartTwo == null) ? 0 : addressPartTwo.hashCode());
-		result = prime * result + ((age == null) ? 0 : age.hashCode());
-		result = prime * result + ((city == null) ? 0 : city.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((genderCode == null) ? 0 : genderCode.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((state == null) ? 0 : state.hashCode());
-		result = prime * result + ((zip == null) ? 0 : zip.hashCode());
-		return result;
-	}
-	
-	public long hash(){
-		StringBuilder builder = new StringBuilder();
-		builder.append(firstName);
-		builder.append(lastName);
-		builder.append(addressPartOne);
-		builder.append(addressPartTwo);
-		builder.append(state);
-		builder.append(city);
-		builder.append(zip);
-		builder.append(genderCode);
-		builder.append(age);
-		return HashUtils.getSHA1(builder.toString());
 	}
 
 	@Override
@@ -193,7 +304,7 @@ public class Person {
 			if (other.addressPartOne != null) {
 				return false;
 			}
-		} 
+		}
 		else if (!addressPartOne.equals(other.addressPartOne)) {
 			return false;
 		}
@@ -201,7 +312,7 @@ public class Person {
 			if (other.addressPartTwo != null) {
 				return false;
 			}
-		} 
+		}
 		else if (!addressPartTwo.equals(other.addressPartTwo)) {
 			return false;
 		}
@@ -209,23 +320,39 @@ public class Person {
 			if (other.age != null) {
 				return false;
 			}
-		} 
+		}
 		else if (!age.equals(other.age)) {
+			return false;
+		}
+		if (birthday == null) {
+			if (other.birthday != null) {
+				return false;
+			}
+		} 
+		else if (!birthday.equals(other.birthday)) {
 			return false;
 		}
 		if (city == null) {
 			if (other.city != null) {
 				return false;
 			}
-		} 
+		}
 		else if (!city.equals(other.city)) {
+			return false;
+		}
+		if (ethnicCode == null) {
+			if (other.ethnicCode != null) {
+				return false;
+			}
+		}
+		else if (!ethnicCode.equals(other.ethnicCode)) {
 			return false;
 		}
 		if (firstName == null) {
 			if (other.firstName != null) {
 				return false;
 			}
-		} 
+		}
 		else if (!firstName.equals(other.firstName)) {
 			return false;
 		}
@@ -233,7 +360,7 @@ public class Person {
 			if (other.genderCode != null) {
 				return false;
 			}
-		} 
+		}
 		else if (!genderCode.equals(other.genderCode)) {
 			return false;
 		}
@@ -241,7 +368,7 @@ public class Person {
 			if (other.id != null) {
 				return false;
 			}
-		} 
+		}
 		else if (!id.equals(other.id)) {
 			return false;
 		}
@@ -249,8 +376,16 @@ public class Person {
 			if (other.lastName != null) {
 				return false;
 			}
-		} 
+		}
 		else if (!lastName.equals(other.lastName)) {
+			return false;
+		}
+		if (middleName == null) {
+			if (other.middleName != null) {
+				return false;
+			}
+		} 
+		else if (!middleName.equals(other.middleName)) {
 			return false;
 		}
 		if (state == null) {
@@ -271,5 +406,4 @@ public class Person {
 		}
 		return true;
 	}
-
 }

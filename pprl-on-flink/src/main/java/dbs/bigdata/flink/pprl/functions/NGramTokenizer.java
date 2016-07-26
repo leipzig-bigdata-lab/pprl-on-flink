@@ -1,11 +1,8 @@
 package dbs.bigdata.flink.pprl.functions;
 
-import java.util.ArrayList;
-
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.util.Collector;
-
 import dbs.bigdata.flink.pprl.data.Person;
 
 /**
@@ -17,7 +14,11 @@ public class NGramTokenizer
 	implements FlatMapFunction<Person, Tuple2<String, String>> {
 
 	private static final long serialVersionUID = -8819111750339989196L;
+	
+	private static final String PADDING_CHARACTER = "#";
+	
 	private int ngram;
+	private boolean withTokenPadding;
 	
 	/**
 	 * @param ngram
@@ -25,27 +26,35 @@ public class NGramTokenizer
 	 * @throws Exception
 	 * 		-> an excption is thrown if the value of ngram is smaller then one.
 	 */
-	public NGramTokenizer(int ngram) throws Exception{
+	public NGramTokenizer(int ngram, boolean withTokenPadding) throws Exception{
 		if (ngram >= 1){
 			this.ngram = ngram;
+			this.withTokenPadding = withTokenPadding;
 		}
 		else{
 			throw new Exception();
 		}
 	}
 	
+	/**
+	 * Transform {@link Person} objects into a set of (Id, Token) tuples.
+	 */
 	@Override
 	public void flatMap(Person value, Collector<Tuple2<String, String>> out)
 			throws Exception {
 	
-		String qids = value.getConcatenatedAttributes();
+		String qids = value.getConcatenatedAttributes("");
 		
 		// normalize
 		String normalizedQids = qids.toLowerCase();
 		normalizedQids = normalizedQids.replaceAll("\\s+", "");
-	
-		ArrayList<String> tokens = new ArrayList<String>();
 		
+		if (this.withTokenPadding){
+			for (int i = 1; i < this.ngram; i++){
+				normalizedQids = PADDING_CHARACTER + normalizedQids + PADDING_CHARACTER;
+			}
+		}
+	
 		String token = "";
 		char[] chars = normalizedQids.toCharArray();
 		
@@ -53,13 +62,8 @@ public class NGramTokenizer
 			for (int j = i; j < i + this.ngram; j++){
 				token = token + chars[j];
 			}
-			tokens.add(token);
+			out.collect(new Tuple2<String, String>(value.getId(), token));
 			token = "";
-		}
-		
-		// emit the pairs
-		for (int tokenPointer = 0; tokenPointer < tokens.size(); tokenPointer++){
-			out.collect(new Tuple2<String, String>(value.getId(), tokens.get(tokenPointer)));
 		}
 	}
 	
@@ -70,4 +74,13 @@ public class NGramTokenizer
 	public void setNGramValue(int ngram){
 		this.ngram = ngram;
 	}
+
+	public boolean isWithTokenPadding() {
+		return withTokenPadding;
+	}
+
+	public void setWithTokenPadding(boolean withTokenPadding) {
+		this.withTokenPadding = withTokenPadding;
+	}
+
 }

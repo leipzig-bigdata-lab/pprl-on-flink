@@ -4,13 +4,12 @@ import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 
 /**
- * Abstract class to extend to load various data from 
- * a source file.
+ * Abstract class to load  data from a source file.
  * 
  * @author mfranke
  *
  * @param <T>
- * 		-> Type of Object you want to load from a file.
+ * 		-> type of objects in which each line (row) of the file will be transformed.
  * 
  */
 public abstract class DataLoader<T extends Object> {
@@ -19,15 +18,48 @@ public abstract class DataLoader<T extends Object> {
 	protected String dataFilePath;
 	protected String lineDelimiter;
 	protected String fieldDelimiter;
-	protected DataSet<T> dataSet;	
 	
+	/**
+	 * Creates a new DataLoader object.
+	 */
 	public DataLoader(){}
 
+	/**
+	 * Creates a new DataLoader object.
+	 * @param env
+	 * 		-> the ExecutionEnvironment of the flink job.
+	 */
 	public DataLoader(ExecutionEnvironment env){
+		this(env, "", "", "");
+	}
+
+	/**
+	 * Creates a new DataLoader object.
+	 * @param env
+	 * 		-> the ExecutionEnvironment of the flink job.
+	 * 
+	 * @param dataFilePath
+	 * 		-> path to the data file.
+	 * 
+	 * @param lineDelimiter
+	 * 		-> character separator for the lines (i.e. rows).
+	 * 
+	 * @param fieldDelimiter
+	 * 		-> character separator for the fields (i.e. columns).
+	 */
+	public DataLoader(ExecutionEnvironment env, String dataFilePath, String lineDelimiter, String fieldDelimiter){
 		this.env = env;
+		this.dataFilePath = dataFilePath;
+		this.lineDelimiter = lineDelimiter;
+		this.fieldDelimiter = fieldDelimiter;
 	}
 	
-	public abstract DataSet<T> getAllData();
+	/**
+	 * Reads the data from the file into a DataSet<T> object.
+	 * @return
+	 * 		-> the DataSet<T> representation of the specified file.
+	 */
+	public abstract DataSet<T> getData();
 	
 	public ExecutionEnvironment getEnv() {
 		return env;
@@ -60,13 +92,4 @@ public abstract class DataLoader<T extends Object> {
 	public void setFieldDelimiter(String fieldDelimiter) {
 		this.fieldDelimiter = fieldDelimiter;
 	}
-
-	public DataSet<T> getDataSet() {
-		return dataSet;
-	}
-
-	public void setDataSet(DataSet<T> dataSet) {
-		this.dataSet = dataSet;
-	}
-	
 }

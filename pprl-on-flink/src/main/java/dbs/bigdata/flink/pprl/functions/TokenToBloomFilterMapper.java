@@ -30,6 +30,10 @@ public class TokenToBloomFilterMapper implements FlatMapFunction<Tuple2<String, 
 		this.hashes = hashes;
 	}
 
+	/**
+	 * Transformation of a (Id, Token) tuple into a (Id, Bloom Filter) tuple by
+	 * creating a new bloom filter and adding the token to it.
+	 */
 	@Override
 	public void flatMap(Tuple2<String, String> input, Collector<Tuple2<String, BloomFilter>> output) throws Exception {
 		BloomFilter bf = new BloomFilter(this.size, this.hashes);

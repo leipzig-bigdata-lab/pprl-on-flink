@@ -1,5 +1,6 @@
 pprl-on-flink/target/
 pprl-on-flink/*.csv
+pprl-on-flink/output_files/
 .DS_Store
 *.aux
 *.fdb_latexmk

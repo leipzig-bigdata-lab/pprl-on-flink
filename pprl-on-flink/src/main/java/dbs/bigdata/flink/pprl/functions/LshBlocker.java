@@ -1,49 +1,56 @@
 package dbs.bigdata.flink.pprl.functions;
 
+import java.util.BitSet;
+
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.tuple.*;
 import org.apache.flink.util.Collector;
-
 import dbs.bigdata.flink.pprl.utils.BloomFilter;
+import dbs.bigdata.flink.pprl.utils.BloomFilterWithLshKeys;
+import dbs.bigdata.flink.pprl.utils.HashFamilyGroup;
+import dbs.bigdata.flink.pprl.utils.IndexHash;
 import dbs.bigdata.flink.pprl.utils.Lsh;
 
 /**
  * Class for building blocks from the bloom filter.
  * Therefore the LshBlocker hashes pieces of the bloom filter
- * and generates a block id. 
+ * and generates a blocking key. 
  * 
  * @author mfranke
  *
  */
 public class LshBlocker 
-	implements FlatMapFunction<Tuple2<String, BloomFilter>, Tuple3<String, BloomFilter, Integer>> {
+	implements FlatMapFunction<Tuple2<String, BloomFilter>, Tuple3<Integer, BitSet, BloomFilterWithLshKeys>> {
 
 	
 	private static final long serialVersionUID = 5273583064581285374L;
 
-	private int hashFunctions;
-	private int blockCount;
-	private int partitionSize;
+	private HashFamilyGroup<IndexHash, Boolean> hashFamilyGroup;
 	
-	public LshBlocker(int hashFunctions, int blockCount, int partitionSize){
-		this.hashFunctions = hashFunctions;
-		this.blockCount = blockCount;
-		this.partitionSize = partitionSize;
+	public LshBlocker(HashFamilyGroup<IndexHash, Boolean> hashFamilyGroup){
+		this.hashFamilyGroup = hashFamilyGroup;
 	}
 	
+	/**
+	 * Transformation of (Id, {@link BloomFilter}) tuples
+	 * into (KeyId, KeyValue, {@link BloomFilterWithLshKeys}).
+	 * This transformation executes the first blocking step.
+	 */
 	@Override
 	public void flatMap(Tuple2<String, BloomFilter> value, 
-			Collector<Tuple3<String, BloomFilter, Integer>> out) throws Exception {
+			Collector<Tuple3<Integer, BitSet, BloomFilterWithLshKeys>> out) throws Exception {
 			
-		Lsh lsh = new Lsh(this.hashFunctions, value.f1, this.blockCount, this.partitionSize);
-		int[] block = lsh.getBlocks();
+		Lsh<IndexHash> lsh = new Lsh<IndexHash>(value.f1, this.hashFamilyGroup);
+		BitSet[] lshKeys = lsh.calculateKeys();
 		
-		for (int i = 0; i < block.length; i++){
+		BloomFilterWithLshKeys bfWithKeys = new BloomFilterWithLshKeys(value.f0, value.f1, lshKeys);
+		
+		for (int keyId = 0; keyId < lshKeys.length; keyId++){
 			out.collect(
-				new Tuple3<String, BloomFilter, Integer>(
-					value.f0,
-					value.f1,
-					block[i]
+				new Tuple3<Integer, BitSet, BloomFilterWithLshKeys>(
+					keyId,
+					lshKeys[keyId],
+					bfWithKeys
 				)
 			);
 		}

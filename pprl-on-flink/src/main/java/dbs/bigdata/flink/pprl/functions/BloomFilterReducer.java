@@ -13,7 +13,11 @@ import dbs.bigdata.flink.pprl.utils.BloomFilter;
 public class BloomFilterReducer implements ReduceFunction<Tuple2<String, BloomFilter>> {
 
 	private static final long serialVersionUID = -3771766587993456849L;
-	
+
+	/**
+	 * Transformation of (Id, Bloom Filter) into
+	 * (Id, Bloom Filter) for tupels with the same id.
+	 */
 	@Override
 	public Tuple2<String, BloomFilter> reduce(Tuple2<String, BloomFilter> arg0, Tuple2<String, BloomFilter> arg1)
 			throws Exception {

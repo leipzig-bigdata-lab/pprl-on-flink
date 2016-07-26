@@ -18,6 +18,9 @@ public class BloomFilter {
 	private final int hashFunctions;
 	private BitSet bitset;
 	
+	/**
+	 * Empty default constructor for flink.
+	 */
 	public BloomFilter(){
 		this(0,0,new BitSet());
 	};
@@ -85,13 +88,14 @@ public class BloomFilter {
 	
 	/**
 	 * Merge this bloom filter with another one.
+	 *
 	 * @param other
 	 * 		-> the other bloom filter.
 	 * 
 	 * @return true, if the merging was successfully, else false. 
 	 */
 	public boolean mergeWith(BloomFilter other){
-		if (this.size == other.size && other.bitset != null){
+		if (other != null && other.bitset != null && this.size == other.size){
 			this.bitset.or(other.bitset);
 			return true;
 		}
@@ -110,7 +114,7 @@ public class BloomFilter {
 	 * @return the merged bloom filter result.
 	 */
 	public BloomFilter merge(BloomFilter other){
-		if (this.size == other.size && other.bitset != null){
+		if (other != null && other.bitset != null && this.size == other.size){
 			BitSet bitset = (BitSet) this.bitset.clone();
 			bitset.or(other.bitset);
 			return new BloomFilter(this.size, this.hashFunctions, bitset);
@@ -120,12 +124,36 @@ public class BloomFilter {
 		}
 	}
 	
+	/**
+	 * Performs a logical OR of this bloom filter with the bloom filter argument. 
+	 * This bloom filter is modified so that a bit in it has the value true if 
+	 * and only if it either already had the value true or the corresponding bit in 
+	 * the bit set argument has the value true. 
+	 * 
+	 * @param other
+	 * 		-> the bloom filter argument.
+	 * 
+	 * @return
+	 * 		-> the resulting bloom filter after the logic OR operation.
+	 */
 	public BloomFilter or(BloomFilter other){
 		return this.merge(other);
 	}
 	
+	/**
+	 * Performs a logical AND of this target bloom filter with the argument bloom filter.
+	 * This bloom filter is modified so that each bit in it has the value true if and only 
+	 * if it both initially had the value true and the corresponding bit in the bloom filter
+	 * argument also had the value true.
+	 * 
+	 * @param other
+	 * 		-> the bloom filter argument.
+	 * 
+	 * @return
+	 * 		-> the resulting bloom filter after the logic AND operation.
+	 */
 	public BloomFilter and(BloomFilter other){
-		if (this.size == other.size && other.bitset != null){
+		if (other != null && other.bitset != null && this.size == other.size){
 			BitSet bitset = (BitSet) this.bitset.clone();
 			bitset.and(other.bitset);
 			return new BloomFilter(this.size, this.hashFunctions, bitset);

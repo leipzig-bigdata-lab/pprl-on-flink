@@ -31,6 +31,10 @@ public class TokenToBloomFilterGroupReducer implements
 		this.hashes = hashes;
 	}
 	
+	/**
+	 * Transformation of all (Id, Token) tuples with the same id by adding all tokens
+	 * to a bloom filter and emit the result in the form (Id, Bloom Filter). 
+	 */
 	@Override
 	public void reduce(Iterable<Tuple2<String, String>> values, Collector<Tuple2<String, BloomFilter>> out)
 			throws Exception {

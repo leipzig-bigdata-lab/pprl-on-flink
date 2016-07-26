@@ -1,94 +1,70 @@
 package dbs.bigdata.flink.pprl.utils;
 
 import java.util.BitSet;
+import java.util.List;
 
 /**
- * Class, which implements the LSH functionality and the blocking.
+ * Class, which implements the LSH for blocking.
+ * 
  * @author mfranke
+ * 
+ * @param <T>
+ * 		-> the type of hash function which is a {@link BitSetHashFunction}
+ * 		   that returns a boolean value.
  */
-public class Lsh {
+public class Lsh<T extends BitSetHashFunction<Boolean>>{
 	
-	@SuppressWarnings("unused")
-	private int hashFunctions; // can be removed if not needed
 	private BloomFilter bloomFilter;
-	private int blockCount;
-	private int partitionSize;
+	
+	private HashFamilyGroup<T, Boolean> hashFamilyGroup;
+	
 	
 	/**
-	 * Creates a new Lsh object.
-	 * @param hashFunctions
-	 * 		-> the number of hash functions to use.
+	 * Creates a new {@link Lsh} object.
 	 * 
 	 * @param bloomFilter
 	 * 		-> the bloom filter to be blocked.
 	 * 
-	 * @param blockCount
-	 * 		-> the number of blocks which can possibly be filled.
-	 * 
-	 * @param partitionSize
-	 * 		-> the size of the partitions the bloom filter should sliced into.
-	 * 
-	 * @throws Exception
-	 * 		-> throws an exception, if the partitionSize is not smaller then the size of the bloom filter. 
+	 * @param hashFamilyGroup
+	 * 		-> a group a hash families which are used to build the blocking keys for the
+	 * 		   bloom filter.
 	 */
-	public Lsh(int hashFunctions, BloomFilter bloomFilter, int blockCount, int partitionSize) throws Exception{
-		if (partitionSize < bloomFilter.getSize()){
-			this.hashFunctions = hashFunctions;	
-			this.bloomFilter = bloomFilter;
-			this.blockCount = blockCount;
-			this.partitionSize = partitionSize;
-		}
-		else{
-			throw new Exception();
-		}
+	public Lsh(BloomFilter bloomFilter, HashFamilyGroup<T, Boolean> hashFamilyGroup){
+		this.bloomFilter = bloomFilter;
+		this.hashFamilyGroup = hashFamilyGroup;
 	}
 	
-	@SuppressWarnings("unused")
-	private int hash1(BitSet bits){
-		return Math.abs(HashUtils.getMD5(bits));
-	}
+	/**
+	 * Calculates the blocking keys for the specified bloom filter for the
+	 * defined hash family group.
+	 * 
+	 * @return
+	 * 		-> the blocking keys in form of a {@link BitSet} array.
+	 */
+	public BitSet[] calculateKeys(){
+		int keyCount = hashFamilyGroup.getNumberOfHashFamilies();
+		BitSet[] keys = new BitSet[keyCount];
 		
-	private int hash2(BitSet bits){
-		return Math.abs(HashUtils.getSHA(bits));
-	}
-
-	public int[] getBlocks() {
-		int[] blocks = new int[this.partitionSize];
-		int blockPointer = 0;
+		List<List<Boolean>> hashValues = this.hashFamilyGroup.calculateHashes(this.bloomFilter.getBitset());
 		
-		// divide the bloom filter in subsets of partitionSize
-		BitSet[] subset = this.getSubsetsFromBloomFilter();
-		
-		// hash each subset into blockCount blocks
-		// the hash value builds the block number and is independent for the subsets
-		for (int i = 0; i < subset.length; i++){
-				blocks[blockPointer++] = 
-						(Math.abs(this.hash2(subset[i])) %  blockCount) + (blockCount * i);
+		for (int i = 0; i < hashValues.size(); i++){
+			keys[i] = this.calculateKey(hashValues.get(i));
 		}
-		
-		return blocks;
+				
+		return keys;
 	}
 	
-	private BitSet[] getSubsetsFromBloomFilter(){
-		BitSet bitset = this.bloomFilter.getBitset();
-		int bitsetSize = bitset.size();
-		int start = 0;
-		int subsetSize = bitsetSize / this.partitionSize;
+	private BitSet calculateKey(List<Boolean> hashValues){
+		int hashCount = hashValues.size();
 		
-		BitSet[] subsets = new BitSet[this.partitionSize];
+		BitSet key = new BitSet(hashValues.size());
 		
-		for (int i = 0; i < subsets.length; i++){
-			int end;
-			if (i == subsets.length - 1){
-				end = bitsetSize;
-			}
-			else{
-				end = start + subsetSize;
-			}
-			subsets[i] = bitset.get(start, end);
-			start = end;
+		for (int i = 0; i < hashCount; i++){
+			Boolean hash = hashValues.get(i);
+			key.set(i, hash);
 		}
-		return subsets;
+		
+		return key;
 	}
-
+	
 }

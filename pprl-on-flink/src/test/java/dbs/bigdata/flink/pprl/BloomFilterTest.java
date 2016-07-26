@@ -8,17 +8,18 @@ import org.junit.Test;
 import dbs.bigdata.flink.pprl.utils.BloomFilter;
 
 /**
- * Class for testing our BloonFilter implementation;
+ * Class for testing the {@link BloomFilter} implementation.
+ * 
  * @author mfranke
  */
 public class BloomFilterTest {
 
 	private BloomFilter bloomFilter;
+	private final int size = 100;
+	private final int hashes = 4;
 	
 	@Before
 	public void initializeBloomFilter(){
-		int size = 100;
-		int hashes = 4;
 		this.bloomFilter = new BloomFilter(size, hashes);
 	}
 	
@@ -44,8 +45,17 @@ public class BloomFilterTest {
 	
 	@Test
 	public void testMerge(){
+		this.bloomFilter.clear();
+		this.bloomFilter.addElement("foo");
+		this.bloomFilter.addElement("bar");
 		
-	}
-	
-	
+		BloomFilter otherBloomFilter = new BloomFilter(10,4);
+		assertNull(this.bloomFilter.merge(otherBloomFilter));
+		
+		otherBloomFilter = new BloomFilter(this.size, this.hashes);
+		otherBloomFilter.addElement("abc");
+		
+		BloomFilter mergedBf = this.bloomFilter.merge(otherBloomFilter);
+		assertNotNull(mergedBf);	
+	}	
 }
