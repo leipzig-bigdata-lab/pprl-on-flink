@@ -2,32 +2,26 @@ package dbs.bigdata.flink.pprl;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
-import dbs.bigdata.flink.pprl.data.*;
-import dbs.bigdata.flink.pprl.functions.NGramTokenizer;
+import dbs.bigdata.flink.pprl.data.Person;
+import dbs.bigdata.flink.pprl.functions.NGramListTokenizer;
 
-/**
- * Class for testing the {@link NGramTokenizer} implementation, i.e. the
- * splitting of the person attributes into tokens with flink.
- * 
- * @author mfranke
- *
- */
-public class NGramTokenizerTest {
-
+public class NGramListTokenizerTest {
+	
 	private final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 	private final String personId = "1234";
 	
 	private DataSet<Person> personData;
 	private int ngram;
 	private int tokenCount;
+
 	
 	@Before
 	public void init(){
@@ -50,30 +44,29 @@ public class NGramTokenizerTest {
 				this.tokenCount = this.tokenCount + plus - 1;	
 			}
 		}
+		
 	}
 	
+	
 	@Test
-	public void testNGrams() throws Exception{
+	public void test() throws Exception {
+		assertNotNull(this.personData);
+		assertEquals(1, this.personData.count());
 		
-		DataSet<Tuple2<String, String>> tokens = 
-				personData.flatMap(new NGramTokenizer(this.ngram, false));
+		DataSet<Tuple2<String, List<String>>> newData = this.personData.flatMap(new NGramListTokenizer(this.ngram, false));
 		
-		assertNotNull(tokens);
-				
-		assertEquals(tokenCount, tokens.count());
+		assertNotNull(newData);
 		
-		List<Tuple2<String, String>> tokenList = tokens.collect();
+		assertEquals(1, newData.count());
 		
-		assertFalse(tokenList.isEmpty());
+		List<Tuple2<String, List<String>>> newDataInList = newData.collect();
 		
-		List<String> allTokens = new ArrayList<String>();
-		for (Tuple2<String, String> tuple : tokenList){
-			assertEquals(this.personId, tuple.f0);
-			allTokens.add(tuple.f1);
-		}
+		Tuple2<String, List<String>> tuple = newDataInList.get(0);
 		
-		assertTrue(allTokens.contains("ha"));
-		assertTrue(allTokens.contains("an"));
-		assertTrue(allTokens.contains("nd"));
+		assertEquals(this.personId, tuple.f0);
+		
+		assertEquals(this.tokenCount, tuple.f1.size());
+		
+		assertTrue(tuple.f1.contains("ll"));
 	}
 }

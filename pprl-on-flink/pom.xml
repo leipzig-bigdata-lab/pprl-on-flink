@@ -4,7 +4,7 @@
 	
 	<groupId>org.apache.flink.quickstart</groupId>
 	<artifactId>pprl-on-flink</artifactId>
-	<version>0.2</version>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<name>PPRL on Flink</name>

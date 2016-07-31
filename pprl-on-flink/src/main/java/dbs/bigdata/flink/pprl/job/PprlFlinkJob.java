@@ -1,6 +1,8 @@
 package dbs.bigdata.flink.pprl.job;
 
 import java.util.BitSet;
+import java.util.List;
+
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.*;
@@ -12,6 +14,7 @@ import dbs.bigdata.flink.pprl.functions.AddIdMapper;
 import dbs.bigdata.flink.pprl.functions.BlockReducer;
 import dbs.bigdata.flink.pprl.functions.DuplicateCandidateRemover;
 import dbs.bigdata.flink.pprl.functions.LshBlocker;
+import dbs.bigdata.flink.pprl.functions.NGramListTokenizer;
 import dbs.bigdata.flink.pprl.functions.NGramTokenizer;
 import dbs.bigdata.flink.pprl.functions.SimilarityCalculater;
 import dbs.bigdata.flink.pprl.functions.TokenToBloomFilterGroupReducer;
@@ -103,21 +106,28 @@ public class PprlFlinkJob {
 		
 		return voterData;
 	}
-	
-	private DataSet<Tuple2<String, String>> buildNGrams(ExecutionEnvironment env, 
-			DataSet<Person> data) throws Exception{
-		return data.flatMap(new NGramTokenizer(this.ngramValue, this.withCharacterPadding));
-	}
-	
+		
 	private DataSet<Tuple2<String, BloomFilter>> buildBloomFilter(ExecutionEnvironment env,
-			DataSet<Tuple2<String, String>> data){
+			DataSet<Person> data) throws Exception{
 		if (this.bloomFilterBuildVariantOne){
-			return data.groupBy(0).reduceGroup(new TokenToBloomFilterGroupReducer(this.bloomFilterSize, this.bloomFilterHashes));
+			DataSet<Tuple2<String, List<String>>> tokens = 
+					data.flatMap(new NGramListTokenizer(this.ngramValue, this.withCharacterPadding));
+
+			tokens.writeAsText("output_files/step_2_tokens",  WriteMode.OVERWRITE);
+			//tokens.print();
+			
+			return tokens.groupBy(0).reduceGroup(new TokenToBloomFilterGroupReducer(this.bloomFilterSize, this.bloomFilterHashes));
 		}
 		else{
+			DataSet<Tuple2<String, String>> tokens =
+					data.flatMap(new NGramTokenizer(this.ngramValue, this.withCharacterPadding));
+		
+			tokens.writeAsText("output_files/step_2_tokens",  WriteMode.OVERWRITE);
+			//tokens.print();
+			
 			// map n-grams to bloom filter
 			DataSet<Tuple2<String, BloomFilter>> tokensInBloomFilter =
-					data.flatMap(new TokenToBloomFilterMapper(this.bloomFilterSize, this.bloomFilterHashes));
+					tokens.flatMap(new TokenToBloomFilterMapper(this.bloomFilterSize, this.bloomFilterHashes));
 		
 			// merge the n-grams for the same record
 			return tokensInBloomFilter.groupBy(0).reduce(new BloomFilterReducer());
@@ -160,13 +170,8 @@ public class PprlFlinkJob {
 		voterData.writeAsText("output_files/step_1_voterData",  WriteMode.OVERWRITE);		
 		//voterData.print();
 		
-		// (Person) --> (id, token)
-		DataSet<Tuple2<String, String>> tokens = buildNGrams(env, voterData);
-		tokens.writeAsText("output_files/step_2_tokens",  WriteMode.OVERWRITE);
-		//tokens.print();
-		
-		// (id, token) --> (id, bloom filter)
-		DataSet<Tuple2<String, BloomFilter>> bloomFilter = buildBloomFilter(env, tokens);
+		// (Person) --> (id, token) / (id, {token})  --> (id, bloom filter)
+		DataSet<Tuple2<String, BloomFilter>> bloomFilter = buildBloomFilter(env, voterData);
 		bloomFilter.writeAsText("output_files/step_3_bloomFilter",  WriteMode.OVERWRITE);
 		//bloomFilter.print();
 
@@ -182,12 +187,12 @@ public class PprlFlinkJob {
 		
 		// (keyId, candidate pair) --> (keyId, candidate pair)
 		DataSet<Tuple2<Integer, CandidateBloomFilterPair>> distinctCandidatePairs = removeDuplicateCandidates(env, keysWithCandidatePair);
-		distinctCandidatePairs.writeAsText("output_files/step_7_distinctCandidatePairs", WriteMode.OVERWRITE);
+		distinctCandidatePairs.writeAsText("output_files/step_6_distinctCandidatePairs", WriteMode.OVERWRITE);
 		//distinctCandidatePairs.print();
 		
 		// (keyId, candidate pair) -> (id, id)
 		DataSet<Tuple2<String, String>> matchingPairs = calculateSimilarity(env, distinctCandidatePairs);
-		matchingPairs.writeAsText("output_files/step_8_matchingPairs", WriteMode.OVERWRITE);
+		matchingPairs.writeAsText("output_files/step_7_matchingPairs", WriteMode.OVERWRITE);
 		matchingPairs.print();
 	}
 
@@ -329,17 +334,17 @@ public class PprlFlinkJob {
 		final String dataFilePathDup = "test_voter_dup.txt";
 		final String lineDelimiter = "\n";
 		final String fieldDelimiter = "\t";
-		final String includingFields = "0110011111000110";
+		final String includingFields = "0110010000000000";//"0110011111000110";
 		final String[] personFields  =  {
 				Person.FIRST_NAME_ATTRIBUTE,
 				Person.LAST_NAME_ATTRIBUTE,
-				Person.ADDRESS_PART_ONE_ATTRIBUTE,
-				Person.ADDRESS_PART_TWO_ATTRIBUTE,
-				Person.STATE_ATTRIBUTE,
-				Person.CITY_ATTRIBUTE,
-				Person.ZIP_ATTRIBUTE, 
-				Person.GENDER_CODE_ATTRIBUTE,
-				Person.AGE_ATTRIBUTE
+				Person.ADDRESS_PART_ONE_ATTRIBUTE
+				//Person.ADDRESS_PART_TWO_ATTRIBUTE,
+				//Person.STATE_ATTRIBUTE,
+				//Person.CITY_ATTRIBUTE,
+				//Person.ZIP_ATTRIBUTE, 
+				//Person.GENDER_CODE_ATTRIBUTE,
+				//Person.AGE_ATTRIBUTE
 		};
 		final boolean ignoreFirstLine = false;
 		
@@ -356,13 +361,13 @@ public class PprlFlinkJob {
 		 */
 				
 		final boolean withCharacterPadding = true;
-		final boolean bloomFilterBuildVariantOne = true;
+		final boolean bloomFilterBuildVariantOne = false;
 		
-		final int bloomFilterSize = 10000;
-		final int bloomFilterHashes = 4;
-		final int ngramValue = 3;
+		final int bloomFilterSize = 1000; // 2000
+		final int bloomFilterHashes = 15; // 20
+		final int ngramValue = 3;		  // 2
 		final int numberOfHashFamilies = 5;
-		final int numberOfHashesPerFamily = 100;
+		final int numberOfHashesPerFamily = 10;
 		final double comparisonThreshold = 0.8;
 		
 		

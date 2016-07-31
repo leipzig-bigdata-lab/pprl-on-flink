@@ -163,6 +163,32 @@ public class BloomFilter {
 		}
 	}
 	
+	/**
+	 * Performs a logical XOR of this target bloom filter with the argument bloom filter.
+	 *  This bloom filter is modified so that a bit in it has the value true if and only if
+	 *   one of the following statements holds: 
+	 *   	- The bit initially has the value true, and the corresponding bit in the 
+	 *        argument has the value false. 
+	 *      - The bit initially has the value false, and the corresponding bit in the 
+	 *        argument has the value true. 
+	 * 
+	 * @param other
+	 * 		-> the bloom filter argument.
+	 * 
+	 * @return
+	 * 		-> the resulting bloom filter after the logic XOR operation.
+	 */		
+	public BloomFilter xor(BloomFilter other){
+		if (other != null && other.bitset != null && this.size == other.size){
+			BitSet bitset = (BitSet) this.bitset.clone();
+			bitset.xor(other.bitset);
+			return new BloomFilter(this.size, this.hashFunctions, bitset);
+		}
+		else{
+			return null;
+		}
+	}
+	
 	@Override
 	public String toString(){
 		return this.bitset.toString();

@@ -1,19 +1,23 @@
 package dbs.bigdata.flink.pprl.functions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.util.Collector;
 import dbs.bigdata.flink.pprl.data.Person;
 
 /**
- * Class for splitting the records of the data set (i.e. the quasi identifiers (qids)) into n-gram tokens.
+ * Class for splitting the records of the data set (i.e. the quasi identifiers (qids)) into 
+ * a list of n-gram tokens.
  * 
  * @author mfranke
  */
-public class NGramTokenizer 
-	implements FlatMapFunction<Person, Tuple2<String, String>> {
+public class NGramListTokenizer 
+	implements FlatMapFunction<Person, Tuple2<String, List<String>>> {
 
-	private static final long serialVersionUID = -8819111750339989196L;
+	private static final long serialVersionUID = -8819111750339919196L;
 	
 	private static final String PADDING_CHARACTER = "#";
 	
@@ -30,7 +34,7 @@ public class NGramTokenizer
 	 * @throws Exception
 	 * 		-> an exception is thrown if the value of ngram is smaller then one.
 	 */
-	public NGramTokenizer(int ngram, boolean withTokenPadding) throws Exception{
+	public NGramListTokenizer(int ngram, boolean withTokenPadding) throws Exception{
 		if (ngram >= 1){
 			this.ngram = ngram;
 			this.withTokenPadding = withTokenPadding;
@@ -41,13 +45,15 @@ public class NGramTokenizer
 	}
 	
 	/**
-	 * Transform {@link Person} objects into a set of (Id, Token) tuples.
+	 * Transform {@link Person} objects into a list of (Id, Token) tuples.
 	 */
 	@Override
-	public void flatMap(Person value, Collector<Tuple2<String, String>> out)
+	public void flatMap(Person value, Collector<Tuple2<String, List<String>>> out)
 			throws Exception {
 		
 		String[] qids = value.getAttributeValues();
+		
+		List<String> tokenList = new ArrayList<String>();
 		
 		for (String attribute : qids){
 			// normalize
@@ -55,12 +61,12 @@ public class NGramTokenizer
 			normalizedAttribute = normalizedAttribute.replaceAll("\\s+", "");
 			
 			if (normalizedAttribute.length() > 0){
-				if (this.withTokenPadding){
+				if(this.withTokenPadding){
+					
 					for (int i = 1; i < this.ngram; i++){
 						normalizedAttribute = PADDING_CHARACTER + normalizedAttribute + PADDING_CHARACTER;
 					}
 				}
-			
 				String token = "";
 				char[] chars = normalizedAttribute.toCharArray();
 				
@@ -68,11 +74,15 @@ public class NGramTokenizer
 					for (int j = i; j < i + this.ngram; j++){
 						token = token + chars[j];
 					}
-					out.collect(new Tuple2<String, String>(value.getId(), token));
+					
+					tokenList.add(token);
+	
 					token = "";
 				}
 			}
 		}
+		
+		out.collect(new Tuple2<String, List<String>>(value.getId(), tokenList));
 	}
 	
 	public int getNGramValue(){

@@ -24,6 +24,7 @@ public class Person {
 	public static final String BIRTHDAY_ATTRIBUTE = "birthday";
 	public static final String ETHNIC_CODE_ATTRIBUTE = "ethnicCode";
 	
+	public static final int FIELDS = 13;
 	
 	private String id;
 	private String firstName;
@@ -286,6 +287,25 @@ public class Person {
 		builder.append(ethnicCode);
 		builder.append("]");
 		return builder.toString();
+	}
+	
+	public String[] getAttributeValues(){
+		String[] result = new String[FIELDS-1];
+		
+		result[0] = this.firstName;
+		result[1] = this.middleName;
+		result[2] = this.lastName;
+		result[3] = this.addressPartOne;
+		result[4] = this.addressPartTwo;
+		result[5] = this.state;
+		result[6] = this.city;
+		result[7] = this.zip;
+		result[8] = this.genderCode;
+		result[9] = this.age;
+		result[10] = this.birthday;
+		result[11] = this.ethnicCode;
+		
+		return result;
 	}
 
 	@Override

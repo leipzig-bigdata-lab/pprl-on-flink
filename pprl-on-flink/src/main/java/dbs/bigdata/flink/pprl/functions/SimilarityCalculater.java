@@ -40,10 +40,12 @@ public class SimilarityCalculater implements
 		BloomFilter bf2 = bfCandidateTwo.getBloomFilter();
 		
 		BloomFilter and = bf1.and(bf2);
-		BloomFilter or = bf1.or(bf2);
-				
-		double similarityValue = ((double) and.getCardinality()) / or.getCardinality();
+		//BloomFilter or = bf1.or(bf2);
 		
+		double similarityValue = 
+				//((double) and.getCardinality()) / or.getCardinality();
+				((double) and.getCardinality()) / (bf1.getCardinality() + bf2.getCardinality() - and.getCardinality());
+				
 		if (similarityValue >= this.threshold){
 			out.collect(new Tuple2<String, String>(bfCandidateOne.getId(), bfCandidateTwo.getId()));
 		}
