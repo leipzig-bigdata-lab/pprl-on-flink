@@ -32,8 +32,9 @@
     \begin{frame}
     		\frametitle{Privacy Preserving Record Linkage (PPRL)}        
          \begin{itemize}
-         		\item Auffinden von gemeinsam genutzten Datenelementen (Korrespondenzen)
-         		\item Verbindung von Datensätzen aus einer oder mehreren Datenquellen
+         		%\item Auffinden von gemeinsam genutzten Datenelementen (Korrespondenzen)
+         		\item Objekt-Matching mit verschlüsselten Daten
+         		\item Verbindung von Datensätzen aus mehreren Datenquellen
          		\item Herausforderungen
                 \begin{itemize}
                     \item Schutz personenbezogener Daten
@@ -74,44 +75,38 @@
     \end{frame}
     
     \begin{frame}
-    		\frametitle{Prozess - Lesen der Daten}
+    		\frametitle{Preprocessing - Lesen der Daten}
     		\begin{figure}[H]
     			\includegraphics[width=\textwidth]{graphics/process_1.png}
     		\end{figure}
     \end{frame}
     
     \begin{frame}
-    		\frametitle{Prozess - Lesen der Daten}
+    		\frametitle{Preprocessing - Lesen der Daten}
     		\begin{itemize}
     			\item Nutzung verschiedener Datensätze
     			\begin{itemize}
     				\item North Carolina Voter Registration Database
-    					\footnote{\cite{NorthCarolinaVoterRegistration}}
     				\begin{itemize}
     					\item Erreichbar unter \url{http://dl.ncsbe.gov/}
     					\item Verschieden große Datensätze
     					\item Personenbezogene Daten (z.B. Name, Adresse, Alter, Geschlecht, ...)
     				\end{itemize}
+			\end{itemize}
+			\begin{figure}
+    				\includegraphics[width=0.95\textwidth]{graphics/voter_dataset.png}
+    			\end{figure}
+    			\begin{itemize}
     				\item Nutzung von generierten Daten
     				\begin{itemize}
-    					\item Beginn der Übersetzung eines DataCorruptors\footnote{\cite{DataCorruptor}} in Java mit Flink 
+    					\item Beginn der Übersetzung eines DataCorruptors\footnote{Peter Christen, Dinusha Vatsalan, Flexible and extensible generation and corruption of personal data, ACM, 2013, CIKM '13 Proceedings of the 22nd ACM international conference on Information \& Knowledge Management,  \url{http://dl.acm.org/citation.cfm?id=2507815}} in Java mit Flink 
     				\end{itemize}	
     			\end{itemize} 
     		\end{itemize}
     \end{frame}
     
     \begin{frame}
-    		\frametitle{Prozess - Lesen der Daten}
-    		\begin{itemize}
-    			\item Aufbau des Datensatzes
-    			\begin{figure}
-    				\includegraphics[width=0.95\textwidth]{graphics/voter_dataset.png}
-    			\end{figure}
-    		\end{itemize}
-    \end{frame}
-    
-    \begin{frame}
-    		\frametitle{Prozess - Lesen der Daten: Ergebnis}
+    		\frametitle{Preprocessing - Lesen der Daten: Ergebnis}
     		\begin{itemize}
     				\item Ausgabe der Person-Objekte in der Form $(Person)$
     				\begin{figure}[H]
@@ -121,27 +116,29 @@
     \end{frame}
     
     \begin{frame}
-    		\frametitle{Bloom Filter}
+    		\frametitle{Encoding - Bloom Filter}
             \begin{figure}[H]
                 \includegraphics[width=\textwidth]{graphics/bloom_qgram.png}
             \end{figure}
     \end{frame}
 
     \begin{frame}
-    		\frametitle{Prozess - Erstellung der Bloom Filter}
+    		\frametitle{Encoding - Erstellung der Bloom Filter}
     		\begin{figure}[H]
     			\includegraphics[width=\textwidth]{graphics/process_2.png}
     		\end{figure}
     \end{frame}
     
     \begin{frame}
-    		\frametitle{Prozess - Erstellung der Bloom Filter}
+    		\frametitle{Encoding - Erstellung der Bloom Filter}
     		\begin{itemize}
-    			\item Eigene Bloom Filter Implementierung
+    			\item Bloom Filter Implementierung
     			\begin{itemize}
     				\item Einstellbare Länge und Anzahl der Hashfunktionen
     			\end{itemize}
-    			\item 2 Arten der Parallelisierung
+    			\item Auswahl der Felder (Person-Attribute)
+    			\item Auswahl der Tokenlänge (Größe der n-Gramme)
+    			\item 2 Arten der Parallelisierung für Abbildung Token $\mapsto$ Bloom Filter
     			\begin{itemize}
     				\item Parallelisierung auf Record-Ebene
     				\begin{itemize}
@@ -159,7 +156,7 @@
     \end{frame}
     
     \begin{frame}
-    		\frametitle{Prozess - Erstellung der Bloom Filter: Ergebnis}
+    		\frametitle{Encoding - Erstellung der Bloom Filter: Ergebnis}
     		\begin{itemize}
     			\item Ausgabe der Tokens in der Form $(ID_{Person}, Token)$
     				\begin{figure}[H]
@@ -174,7 +171,7 @@
     \end{frame}
    
     \begin{frame}
-    		\frametitle{Prozess - Erstellung der Bloom Filter: Ergebnis}
+    		\frametitle{Encoding - Erstellung der Bloom Filter: Ergebnis}
     		\begin{itemize}
     			\item Ausgabe der Bloom Filter in der Form $(ID_{Person}, BloomFilter)$
     				\begin{figure}[H]
@@ -184,7 +181,7 @@
     \end{frame}
 
     \begin{frame}
-        \frametitle{Locality Sensitive Hashing (LSH)}
+        \frametitle{Indexing - Locality Sensitive Hashing (LSH)}
 
             \begin{figure}[H]
                 \includegraphics[width=0.9\textwidth]{graphics/lsh_intro.png}
@@ -204,14 +201,14 @@
     \end{frame}
 
     \begin{frame}
-    		\frametitle{Prozess - Blocking mit LSH}
+    		\frametitle{Indexing - Blocking mit LSH}
     		\begin{figure}[H]
     			\includegraphics[width=\textwidth]{graphics/process_3.png}
     		\end{figure}
     \end{frame}
     
     \begin{frame}
-    		\frametitle{Prozess - Blocking mit LSH: Ergebnis}
+    		\frametitle{Indexing - Blocking mit LSH: Ergebnis}
     		\begin{itemize}
     			\item Ergebnis des Blockings in der Form $(ID_{LshKey}, Value_{LshKey},
     			 BloomFilter)$
@@ -222,21 +219,21 @@
     \end{frame}
     
     \begin{frame}
-    		\frametitle{Prozess - Duplikatentfernung}
+    		\frametitle{Indexing - Duplikatentfernung}
     		\begin{figure}[H]
     			\includegraphics[width=\textwidth]{graphics/process_4.png}
     		\end{figure}
     \end{frame}
     
     \begin{frame}
-    		\frametitle{Prozess - Ähnlichkeitsberechnung}
+    		\frametitle{Comparison - Ähnlichkeitsberechnung}
     		\begin{figure}[H]
     			\includegraphics[width=\textwidth]{graphics/process_5.png}
     		\end{figure}
     \end{frame}
     
     \begin{frame}
-    		\frametitle{Prozess - Ähnlichkeitsberechnung: Ergebnis}
+    		\frametitle{Comparison - Ähnlichkeitsberechnung: Ergebnis}
     		\begin{itemize}
     			\item Ergebnis ist Matching Pair in der Form $(ID_1, ID_2)$
     		\end{itemize}
@@ -253,6 +250,7 @@
     		\begin{itemize}
     			\item Vielzahl von Parametern
     			\begin{itemize}
+    				\item Auswahl der Attribute
     				\item Länge der Bloom Filter
     				\item Anzahl der Hashfunktionen
     				\item Länge der n-Gramme
@@ -269,11 +267,11 @@
                 \item Data Corrupter
     		\end{itemize}
     \end{frame}
-     
-     \begin{frame}
-     	\frametitle{Quellen}
-      	\bibliographystyle{alphadin}
-      	\bibliography{library}
-	\end{frame}
-     
+    
+    % ------------- Demonstration ----------- %
+    \section[Section]{Demonstration}
+    \begin{frame}
+    		\frametitle{Demonstration}
+    \end{frame}
+        
 \end{document}
