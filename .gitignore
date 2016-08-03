@@ -14,3 +14,4 @@ pprl-on-flink/output_files/
 *.toc
 *.bbl
 *.blg
+!pprl-on-flink/documentation/Testat_03/Abschlusspräsentation/graphics/pprl.pdf
