@@ -2,6 +2,7 @@
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+\usepackage{amsmath}
 
 \title{Privacy Preserving Record Linkage on Flink}
 
@@ -36,7 +37,7 @@
          		\item Herausforderungen
                 \begin{itemize}
                     \item Schutz personenbezogener Daten
-                    \item Sicherung der Privatspähre, des Datenschutzes \& der Vertrauchlichkeit
+                    %\item Sicherung der Privatspähre, des Datenschutzes \& der Vertrauchlichkeit
                     \item Wachsende Datenmengen (Skalierbarkeit)
                     \item Qualität der Daten
                 \end{itemize}
@@ -51,32 +52,19 @@
     \end{frame}
     
     \begin{frame}
-    		\frametitle{Flink}
-        	Something about Flink.
-    \end{frame}
-
-	\begin{frame}
-    		\frametitle{Bloom Filter}
+    		\frametitle{Apache Flink}
+            %\begin{itemize}
+                %%\item Analyse von Batch- und Streaming-Daten
+                %\item Java und Scala
+                %\item MapReduce vs. Parallel Database Systems
+            %\end{itemize}
             \begin{figure}[H]
-                \includegraphics[width=\textwidth]{graphics/bloom_qgram.png}
+                \includegraphics[width=\textwidth]{graphics/flink_stack.png}
+                \caption{https://flink.apache.org/img/flink-stack-frontpage.png}
             \end{figure}
     \end{frame}
     
-    \begin{frame}
-        \frametitle{Locality Sensitive Hashing (LSH)}
-            Locality Sensitive Hashing
-            \begin{itemize}
-                \item Jaccarrd-Similarity
-                    \begin{itemize}
-                        \item jaccard\ldots
-                    \end{itemize}
-                \item Hamming-Distance
-                    \begin{itemize}
-                        \item hamming\ldots
-                    \end{itemize}
-            \end{itemize}
-    \end{frame}
-   % ------------- Realisierung ----------- %
+       % ------------- Realisierung ----------- %
     \section[Section]{Realisierung}
     
     \begin{frame}
@@ -134,6 +122,13 @@
     \end{frame}
     
     \begin{frame}
+    		\frametitle{Bloom Filter}
+            \begin{figure}[H]
+                \includegraphics[width=\textwidth]{graphics/bloom_qgram.png}
+            \end{figure}
+    \end{frame}
+
+    \begin{frame}
     		\frametitle{Prozess - Erstellung der Bloom Filter}
     		\begin{figure}[H]
     			\includegraphics[width=\textwidth]{graphics/process_2.png}
@@ -188,7 +183,23 @@
     				\end{figure}
     		\end{itemize}
     \end{frame}
-    
+
+    \begin{frame}
+        \frametitle{Locality Sensitive Hashing (LSH)}
+       
+            \begin{itemize}
+                \item Jaccarrd-LSH
+                    \begin{itemize}
+                        \item $Jaccard(I,J) = \frac{|I \cap J|}{|I \cup J|}$
+                    \end{itemize}
+                \item Hamming-LSH
+                    \begin{itemize}
+                        \item $Hamming(I,J) = I \oplus J$
+                    \end{itemize}
+            \end{itemize}
+
+    \end{frame}
+
     \begin{frame}
     		\frametitle{Prozess - Blocking mit LSH}
     		\begin{figure}[H]
@@ -252,6 +263,7 @@
     				\item Beeinflusst Art und Weise der Parallelisierung
     			\end{itemize}
     			\item Mehrere Möglichkeiten der Parallelisierung
+                \item Data Corrupter
     		\end{itemize}
     \end{frame}
      
