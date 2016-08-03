@@ -140,36 +140,26 @@
     			\item Auswahl der Tokenlänge (Größe der n-Gramme)
     			\item 2 Arten der Parallelisierung für Abbildung Token $\mapsto$ Bloom Filter
     			\begin{itemize}
-    				\item Parallelisierung auf Record-Ebene
-    				\begin{itemize}
-    					\item Ausgabe der Token als Liste
-    					\item Alle Tokens werden gemeinsam in einen Bloom Filter aufgenommen
-    				\end{itemize}
     				\item Parallelisierung auf Token-Ebene
-    				\begin{itemize}
-    					\item Ausgabe der Tokens einzeln
-    					\item Für jeden Token wird ein eigener Bloom Filter erstellt
-    					\item Entstandene Bloom Filter werden durch OR-Verknüpfung vereinigt
-    				\end{itemize}
+    				\item Parallelisierung auf Record-Ebene
     			\end{itemize}
     		\end{itemize}
     \end{frame}
     
     \begin{frame}
-    		\frametitle{Encoding - Erstellung der Bloom Filter: Ergebnis}
-    		\begin{itemize}
-    			\item Ausgabe der Tokens in der Form $(ID_{Person}, Token)$
-    				\begin{figure}[H]
-    					\includegraphics[width=0.18\textwidth]{graphics/tokens_1.png}
-    				\end{figure}
-    			\item Ausgabe der Tokens bei Parallelisierung auf Record-Ebene in der Form
-    			$(ID_{Person}, List(Token))$
-    				\begin{figure}[H]
-    					\includegraphics[width=0.9\textwidth]{graphics/tokens_2.png}
-    				\end{figure}
-    		\end{itemize}
+    		\frametitle{Encoding - Erstellung der Bloom Filter: Parallelisierung}
+    		\begin{figure}[H]
+    				\includegraphics[width=\textwidth]{graphics/bf_par.png}
+    		\end{figure}
     \end{frame}
    
+    \begin{frame}
+    		\frametitle{Encoding - Erstellung der Bloom Filter: Parallelisierung}
+    		\begin{figure}[H]
+    				\includegraphics[width=\textwidth]{graphics/bf_par2.png}
+    		\end{figure}
+    \end{frame}
+    
     \begin{frame}
     		\frametitle{Encoding - Erstellung der Bloom Filter: Ergebnis}
     		\begin{itemize}
