@@ -1,3 +1,3 @@
 DURHA	MEMARCO             	HARRIS                   	DONTEZ              	 	1309 HUDSON AVE          	APT B15                  	NC	DURHAM                	27705	3372	B	NL	M	23	DEM	2015-12-14
 GUILF	GRADY               	WILLIAMS                 	                    	III	821 AVALON RD            	                         	NC	GREENSBORO            	27401	4320	B	NL	M	52	DEM	2016-01-06
-MARTI	MARGARETT            	PEARSON                  	JOHNSON             	 	401 ROBERSON ST          	                         	NC	WILLIAMSTON           	27892	1525	B	NL	F	61	DEM	2016-01-06
+MARTI	MARGARETT            	PEARSON                  	JOHNSON             	 	401 ROBERSON ST          	                         	NC	WILLIAMSTON           	27892	1525	B	NL	F	61	DEM	2016-01-06WAKE 	MAURICE             	JONES                    	ALAN                	 	1601 AMBER RIDGE LN      	APT J                    	NC	RALEIGH               	27607	5065	B	NL	M	27	DEM	2014-01-10
