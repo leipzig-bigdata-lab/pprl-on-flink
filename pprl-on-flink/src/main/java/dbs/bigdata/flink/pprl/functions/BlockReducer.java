@@ -45,17 +45,18 @@ public class BlockReducer
 				String id1 = value.f2.getId();
 				String id2 = otherValue.f2.getId();
 				
-				if (!id1.equals(id2)){
+				//maybe use the data set identifier as parameter here
+				if (!id1.equals(id2) && !id1.startsWith(id2.substring(0, 1))){
 					BitSet key1 = value.f1;
 					BitSet key2 = otherValue.f1;
-						
-					CandidateBloomFilterPair candidatePair =
-							new CandidateBloomFilterPair(
-									value.f2,
-									otherValue.f2
-							);
-					
+										
 					if (key1.equals(key2)){
+						CandidateBloomFilterPair candidatePair =
+								new CandidateBloomFilterPair(
+										value.f2,
+										otherValue.f2
+								);
+						
 						out.collect(new Tuple2<Integer, CandidateBloomFilterPair>(keyId, candidatePair));
 					}	
 				}

@@ -168,32 +168,28 @@ public class PprlFlinkJob {
 		// csv-file --> (Person)
 		DataSet<Person> voterData = loadDataFromCsvFiles(env);
 		voterData.writeAsText("output_files/step_1_voterData",  WriteMode.OVERWRITE);		
-		//voterData.print();
 		
 		// (Person) --> (id, token) / (id, {token})  --> (id, bloom filter)
 		DataSet<Tuple2<String, BloomFilter>> bloomFilter = buildBloomFilter(env, voterData);
 		bloomFilter.writeAsText("output_files/step_3_bloomFilter",  WriteMode.OVERWRITE);
-		//bloomFilter.print();
 
 		// (id, bloom filter) --> (keyId, keyValue, bloom filter with keys)
 		DataSet<Tuple3<Integer, BitSet, BloomFilterWithLshKeys>> keyBloomFilterPairs = calculateLshKeys(env, bloomFilter);
 		keyBloomFilterPairs.writeAsText("output_files/step_4_keyBloomFilterPairs",  WriteMode.OVERWRITE);
-		//keyBloomFilterPairs.print();
 				
 		// (keyId, key, BloomFilter) --> (keyId, candidate pair)
 		DataSet<Tuple2<Integer, CandidateBloomFilterPair>> keysWithCandidatePair = blockWithLshKeys(env, keyBloomFilterPairs);
 		keysWithCandidatePair.writeAsText("output_files/step_5_keysWithCandidatePair", WriteMode.OVERWRITE);
-		//keyWithCandidatePair.print();
 		
 		// (keyId, candidate pair) --> (keyId, candidate pair)
 		DataSet<Tuple2<Integer, CandidateBloomFilterPair>> distinctCandidatePairs = removeDuplicateCandidates(env, keysWithCandidatePair);
 		distinctCandidatePairs.writeAsText("output_files/step_6_distinctCandidatePairs", WriteMode.OVERWRITE);
-		//distinctCandidatePairs.print();
 		
 		// (keyId, candidate pair) -> (id, id)
 		DataSet<Tuple2<String, String>> matchingPairs = calculateSimilarity(env, distinctCandidatePairs);
 		matchingPairs.writeAsText("output_files/step_7_matchingPairs", WriteMode.OVERWRITE);
 		matchingPairs.print();
+		System.out.println(matchingPairs.count());;
 	}
 
 	public String getDataFilePath() {
@@ -330,10 +326,10 @@ public class PprlFlinkJob {
 		*/
 		
 		// other data files: "dmv_voter_id.txt"	
-		final String dataFilePath = "test_voter.txt";
-		final String dataFilePathDup = "test_voter_dup.txt";
+		final String dataFilePath = "org_E_100000.csv";//"dmv_voter_id.txt";//"org_D_1000.csv";//"test_voter.txt";
+		final String dataFilePathDup = "dup_E_100000.csv";//"test_voter.txt";//"dup_D_1000.csv";//"test_voter_dup.txt";
 		final String lineDelimiter = "\n";
-		final String fieldDelimiter = "\t";
+		final String fieldDelimiter = ",";//"\t";//",";//"\t";
 		final String includingFields = "0110010000000000";//"0110011111000110";
 		final String[] personFields  =  {
 				Person.FIRST_NAME_ATTRIBUTE,
