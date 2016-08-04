@@ -11,3 +11,32 @@ SCOTL	DANA                	MORIN                    	MICHELLE            	 	2218
 WILSO	STEVEN              	COMO                     	DAVID               	 	102C PARKVIEW ST W       	                         	NC	WILSON                	27893	3640	W	UN	M	58	LIB	2014-10-27
 CLEVE	SHANIYA             	WEBBER                   	KYANN               	 	229 CHESTNUT ST          	APT 3C                   	NC	SHELBY                	28150	5685	B	NL	F	19	UNA	2014-10-27
 BUNCO	LAURA               	FRONTIERRO               	JEANNE              	 	111 BEAR CREEK LN        	APT 6                    	NC	ASHEVILLE             	28806	1650	W	NL	F	37	DEM	2014-10-27
+CALDW	MICHAEL             	RIFICI                   	ANTHONY             	 	2717 AMBER POND CT       	                         	NC	GRANITE FALLS         	28630	8223	W	NL	M	39	UNA	2014-01-10
+DAVID	JEFFERY             	SIMS                     	RAYMOND             	 	411 CID RD               	                         	NC	LEXINGTON				27292	7308	W	NL	M	21	UNA	2014-01-10
+FORSY	BRENDA              	SIMON                    	TEAL                	 	2001 EMORYWOOD RD        	                         	NC	RURAL HALL            	27045	9767	B	NL	F	60	DEM	2014-01-10
+FORSY	CHERYL              	DONNIE                   	LINDSAY             	 	1640 W NORTHWEST BLVD    	APT 14                   	NC	WINSTON SALEM         	27104	4335	B	NL	F	67	DEM	2014-01-10
+GUILF	GEMELA              	DAVIS                    	KIDADA              	 	2001 SPENCER ST          	APT B                    	NC	GREENSBORO            	27401	4175	B	NL	F	38	DEM	2014-01-10
+MECKL	SHIRLEY             	CARTER                   	ANN                 	 	9536 SPRINGFIELD GARDENS 	APT A                    	NC	CHARLOTTE             	28227	3565	B	NL	F	61	DEM	2014-01-10
+MECKL	DONTRE              	DAVIS                    	ALEXANDER           	 	2437 BROOK CANYON DR     	                         	NC	CHARLOTTE             	28212	7243	B	NL	M	23	DEM	2014-01-10
+EDGEC	CONNIE              	PHILIPS WATSON          	DENISE              	 	89 TODD LN               	                         	NC	PINETOPS              	27864	7112	W	NL	F	50	REP	2014-01-08
+CRAVE	BRIAN               	FONVILLE                 	KEITH               	 	1160 HWY 55W             	                         	NC	NEW BERN              	28562	0000	B	NL	M	55	DEM	2014-01-08
+FORSY	JAMES               	MCKENZIE                 	HENRY               	 	317 GREEN ST             	APT 7                    	NC	WINSTON SALEM         	27101	    	B	NL	M	63	DEM	2014-01-08
+FORSY	SHAJUANA            	ELDRIDGE                 	                    	 	4130 EDGEWARE RD         	                         	NC	WINSTON SALEM         	27106	2214	B	NL	F	31	DEM	2014-01-08
+GUILF	TAMEAKA             	ERVIN                    	MICHON              	 	1431 OLD HICKORY DR      	                         	NC	GREENSBORO            	27405	5441	B	NL	F	28	DEM	2014-01-08
+GUILF	PRESTON             	DAVIS                    	LEON                	JR	824 LOGAN ST             	                         	NC	GREENSBORO            	27401	3436	B	UN	M	53	UNA	2014-01-08
+PITT 	ANTONIO             	STRETER                 	                    	 	1008 PEED DR             	APT 7                    	NC	GREENVILLE            	27834	6777	B	NL	M	43	REP	2014-01-08
+WAKE 	CAROLYN             	WHICHARD                 	DELORIS             	 	701 BRIGHT CREEK WAY     	APT 302                  	NC	RALEIGH               	27601	2440	B	NL	F	59	DEM	2014-01-08
+ALAMA	BORIS               	MATTHEWS                 	DARNELL             	 	1436 LANIER CT           	                         	NC	BURLINGTON            	27217	1748	B	UN	M	53	UNA	2014-01-09
+ALAMA	CANDACE             	SWAIM                    	VIANDS              	 	1137 VILLA DR            	                         	NC	GRAHAM                	27253	3671	W	NL	F	50	REP	2014-01-09
+CARTE	COURTNEY            	CREECH                   	BROOKE              	 	172 WHITE OAK DR         	                         	NC	NEWPORT               	28570	9423	W	NL	F	21	UNA	2014-01-09
+CHATH	STEVEN              	POE                      	RODNEY              	 	507 N 3RD AVE            	APT E                    	NC	SILER CITY            	27344	3157	W	NL	M	42	DEM	2014-01-09
+WATAU	LARRISSA            	TRUAX                    	ROSE                	 	1016 HOPEWELL CH RD      	                         	NC	BOONE                 	28607	    	W	NL	F	28	DEM	2015-10-12
+NORTH	KATIFAHIA           	BOSSER                   	GRASHAE             	 	226 MEADOW DR            	                         	NC	RICH SQUARE           	27869	9468	B	NL	F	25	REP	2015-10-12
+NASH 	TYKESHA             	OWENS                    	ELISE               	 	1221 NIBLICK DR          	APT H                    	NC	ROCKY MOUNT           	27804	9667	B	NL	F	42	DEM	2015-10-12
+NASH 	JIMMIE              	HARGROVE                 	EARL                	 	416 KINGSTON AVE         	                         	NC	ROCKY MOUNT           	27803	4727	B	NL	M	54	UNA	2015-10-12
+UNION	JEANNA              	STRANGIS                 	MARIE               	 	1403 PARKSIDE DR         	                         	NC	MONROE                	28110	9566	W	NL	F	18	UNA	2015-10-12
+WAYNE	TIMOTHY             	COX                      	ERNAL               	 	2848 OLD SMITHFIELD RD   	LOT B                    	NC	PRINCETON             	27569	    	B	NL	M	56	DEM	2015-10-12
+YADKI	SAMUEL              	BOST                     	LEE                 	 	2202 HUDSPETH RD         	                         	NC	YADKINVILLE           	27055	5224	W	NL	M	35	UNA	2015-10-13
+WASHI	MELVIN              	BROWN                    	LEE                 	JR	107 PINE ST              	                         	NC	PLYMOUTH              	27962	2023	B	NL	M	40	DEM	2015-10-13
+FORSY	BRIANNA             	GAITHER                  	JEAN                	 	231 COUNTRYSIDE CT       	                         	NC	WINSTON SALEM         	27105	7140	B	NL	F	19	DEM	2015-10-13
+CARTE	BRAEDON             	BECK                     	ISAAK               	 	216 MCKAE DR             	                         	NC	GLOUCESTER            	28528	9317	W	NL	M	21	UNA	2015-10-16

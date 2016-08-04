@@ -113,7 +113,7 @@ public class PprlFlinkJob {
 			DataSet<Tuple2<String, List<String>>> tokens = 
 					data.flatMap(new NGramListTokenizer(this.ngramValue, this.withCharacterPadding));
 
-			tokens.writeAsText("output_files/step_2_tokens",  WriteMode.OVERWRITE);
+			tokens.writeAsText("output_files/step_2_1_tokens",  WriteMode.OVERWRITE);
 			//tokens.print();
 			
 			return tokens.groupBy(0).reduceGroup(new TokenToBloomFilterGroupReducer(this.bloomFilterSize, this.bloomFilterHashes));
@@ -122,7 +122,7 @@ public class PprlFlinkJob {
 			DataSet<Tuple2<String, String>> tokens =
 					data.flatMap(new NGramTokenizer(this.ngramValue, this.withCharacterPadding));
 		
-			tokens.writeAsText("output_files/step_2_tokens",  WriteMode.OVERWRITE);
+			tokens.writeAsText("output_files/step_2_1_tokens",  WriteMode.OVERWRITE);
 			//tokens.print();
 			
 			// map n-grams to bloom filter
@@ -168,32 +168,28 @@ public class PprlFlinkJob {
 		// csv-file --> (Person)
 		DataSet<Person> voterData = loadDataFromCsvFiles(env);
 		voterData.writeAsText("output_files/step_1_voterData",  WriteMode.OVERWRITE);		
-		//voterData.print();
 		
 		// (Person) --> (id, token) / (id, {token})  --> (id, bloom filter)
 		DataSet<Tuple2<String, BloomFilter>> bloomFilter = buildBloomFilter(env, voterData);
-		bloomFilter.writeAsText("output_files/step_3_bloomFilter",  WriteMode.OVERWRITE);
-		//bloomFilter.print();
+		bloomFilter.writeAsText("output_files/step_2_2_bloomFilter",  WriteMode.OVERWRITE);
 
 		// (id, bloom filter) --> (keyId, keyValue, bloom filter with keys)
 		DataSet<Tuple3<Integer, BitSet, BloomFilterWithLshKeys>> keyBloomFilterPairs = calculateLshKeys(env, bloomFilter);
-		keyBloomFilterPairs.writeAsText("output_files/step_4_keyBloomFilterPairs",  WriteMode.OVERWRITE);
-		//keyBloomFilterPairs.print();
+		keyBloomFilterPairs.writeAsText("output_files/step_3_keyBloomFilterPairs",  WriteMode.OVERWRITE);
 				
 		// (keyId, key, BloomFilter) --> (keyId, candidate pair)
 		DataSet<Tuple2<Integer, CandidateBloomFilterPair>> keysWithCandidatePair = blockWithLshKeys(env, keyBloomFilterPairs);
-		keysWithCandidatePair.writeAsText("output_files/step_5_keysWithCandidatePair", WriteMode.OVERWRITE);
-		//keyWithCandidatePair.print();
+		keysWithCandidatePair.writeAsText("output_files/step_4_keysWithCandidatePair", WriteMode.OVERWRITE);
 		
 		// (keyId, candidate pair) --> (keyId, candidate pair)
 		DataSet<Tuple2<Integer, CandidateBloomFilterPair>> distinctCandidatePairs = removeDuplicateCandidates(env, keysWithCandidatePair);
-		distinctCandidatePairs.writeAsText("output_files/step_6_distinctCandidatePairs", WriteMode.OVERWRITE);
-		//distinctCandidatePairs.print();
+		distinctCandidatePairs.writeAsText("output_files/step_5_distinctCandidatePairs", WriteMode.OVERWRITE);
 		
 		// (keyId, candidate pair) -> (id, id)
 		DataSet<Tuple2<String, String>> matchingPairs = calculateSimilarity(env, distinctCandidatePairs);
-		matchingPairs.writeAsText("output_files/step_7_matchingPairs", WriteMode.OVERWRITE);
-		matchingPairs.print();
+		matchingPairs.writeAsText("output_files/step_6_matchingPairs", WriteMode.OVERWRITE);
+		//matchingPairs.print();
+		System.out.println(matchingPairs.count());;
 	}
 
 	public String getDataFilePath() {
@@ -330,10 +326,10 @@ public class PprlFlinkJob {
 		*/
 		
 		// other data files: "dmv_voter_id.txt"	
-		final String dataFilePath = "test_voter.txt";
-		final String dataFilePathDup = "test_voter_dup.txt";
+		final String dataFilePath = "dmv_voter_id.txt";//"org_D_1000.csv";//"test_voter.txt";
+		final String dataFilePathDup = "test_voter.txt";//"dup_D_1000.csv";//"test_voter_dup.txt";
 		final String lineDelimiter = "\n";
-		final String fieldDelimiter = "\t";
+		final String fieldDelimiter = "\t";//",";//"\t";
 		final String includingFields = "0110010000000000";//"0110011111000110";
 		final String[] personFields  =  {
 				Person.FIRST_NAME_ATTRIBUTE,
@@ -367,7 +363,7 @@ public class PprlFlinkJob {
 		final int bloomFilterHashes = 15; // 20
 		final int ngramValue = 3;		  // 2
 		final int numberOfHashFamilies = 5;
-		final int numberOfHashesPerFamily = 10;
+		final int numberOfHashesPerFamily = 15;
 		final double comparisonThreshold = 0.8;
 		
 		
@@ -388,6 +384,10 @@ public class PprlFlinkJob {
 		job.setNumberOfHashesPerFamily(numberOfHashesPerFamily);
 		job.setComparisonThreshold(comparisonThreshold);
 		
+		long startTime = System.currentTimeMillis();
 		job.runJob();
+		long endTime = System.currentTimeMillis();
+		
+		System.out.println("Calculation time: " + (endTime - startTime));
 	}
 }	
