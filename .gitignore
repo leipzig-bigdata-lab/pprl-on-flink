@@ -8,10 +8,8 @@ pprl-on-flink/output_files/
 *.log
 *.nav
 *.out
-*.pdf
 *.snm
 *.synctex.gz
 *.toc
 *.bbl
 *.blg
-!pprl-on-flink/documentation/Testat_03/*/*/*.pdf
