@@ -44,7 +44,7 @@ public class PprlFlinkJob {
 	private String[] personFields;
 	private boolean ignoreFirstLine;
 	private boolean withCharacterPadding;
-	private boolean bloomFilterBuildVariantOne;
+	private boolean bloomFilterBuildVariantRecordParallelism;
 	private int bloomFilterSize;
 	private int bloomFilterHashes;
 	private int ngramValue;
@@ -59,7 +59,7 @@ public class PprlFlinkJob {
 	
 	public PprlFlinkJob(String dataFilePath, String dataFilePathDup, String lineDelimiter, String fieldDelimiter,
 			String includingFields, String[] personFields, boolean ignoreFirstLine, boolean withCharacterPadding,
-			boolean bloomFilterBuildVariantOne, int bloomFilterSize, int bloomFilterHashes, int ngramValue,
+			boolean bloomFilterBuildVariantRecordParallelism, int bloomFilterSize, int bloomFilterHashes, int ngramValue,
 			int numberOfHashFamilies, int numberOfHashesPerFamily, double comparisonThreshold) {
 		// set up the execution environment
 		this.env = ExecutionEnvironment.getExecutionEnvironment();
@@ -71,7 +71,7 @@ public class PprlFlinkJob {
 		this.personFields = personFields;
 		this.ignoreFirstLine = ignoreFirstLine;
 		this.withCharacterPadding = withCharacterPadding;
-		this.bloomFilterBuildVariantOne = bloomFilterBuildVariantOne;
+		this.bloomFilterBuildVariantRecordParallelism = bloomFilterBuildVariantRecordParallelism;
 		this.bloomFilterSize = bloomFilterSize;
 		this.bloomFilterHashes = bloomFilterHashes;
 		this.ngramValue = ngramValue;
@@ -109,7 +109,7 @@ public class PprlFlinkJob {
 		
 	private DataSet<Tuple2<String, BloomFilter>> buildBloomFilter(ExecutionEnvironment env,
 			DataSet<Person> data) throws Exception{
-		if (this.bloomFilterBuildVariantOne){
+		if (this.bloomFilterBuildVariantRecordParallelism){
 			DataSet<Tuple2<String, List<String>>> tokens = 
 					data.flatMap(new NGramListTokenizer(this.ngramValue, this.withCharacterPadding));
 
@@ -256,12 +256,12 @@ public class PprlFlinkJob {
 		this.withCharacterPadding = withCharacterPadding;
 	}
 
-	public boolean isBloomFilterBuildVariantOne() {
-		return bloomFilterBuildVariantOne;
+	public boolean isBloomFilterBuildVariantRecordParallelism() {
+		return bloomFilterBuildVariantRecordParallelism;
 	}
 
-	public void setBloomFilterBuildVariantOne(boolean bloomFilterBuildVariantOne) {
-		this.bloomFilterBuildVariantOne = bloomFilterBuildVariantOne;
+	public void setBloomFilterBuildVariantRecordParallelism(boolean bloomFilterBuildVariantRecordParallelism) {
+		this.bloomFilterBuildVariantRecordParallelism = bloomFilterBuildVariantRecordParallelism;
 	}
 
 	public int getBloomFilterSize() {
@@ -345,7 +345,7 @@ public class PprlFlinkJob {
 		};
 		final boolean ignoreFirstLine = false;
 		final boolean withCharacterPadding = true;
-		final boolean bloomFilterBuildVariantOne = false;
+		final boolean bloomFilterBuildVariantRecordParallelism = false;
 		
 		final int bloomFilterSize = 1000; // 2000
 		final int bloomFilterHashes = 15; // 20
@@ -364,7 +364,7 @@ public class PprlFlinkJob {
 		job.setPersonFields(personFields);
 		job.setIgnoreFirstLine(ignoreFirstLine);
 		job.setWithCharacterPadding(withCharacterPadding);
-		job.setBloomFilterBuildVariantOne(bloomFilterBuildVariantOne);
+		job.setBloomFilterBuildVariantRecordParallelism(bloomFilterBuildVariantRecordParallelism);
 		job.setBloomFilterSize(bloomFilterSize);
 		job.setBloomFilterHashes(bloomFilterHashes);
 		job.setNgramValue(ngramValue);
