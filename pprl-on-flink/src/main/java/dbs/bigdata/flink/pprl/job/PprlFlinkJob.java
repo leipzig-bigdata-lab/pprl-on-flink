@@ -325,9 +325,10 @@ public class PprlFlinkJob {
 		for (int i = 0; i < personFields.length; i++) System.out.println(personFields[i]);
 		*/
 		
-		// other data files: "dmv_voter_id.txt"	
-		final String dataFilePath = "dmv_voter_id.txt";//"org_D_1000.csv";//"test_voter.txt";
-		final String dataFilePathDup = "test_voter.txt";//"dup_D_1000.csv";//"test_voter_dup.txt";
+		// change input data files here...
+		final String dataFilePath = "dmv_voter_id.txt";
+		final String dataFilePathDup = "test_voter.txt";
+		
 		final String lineDelimiter = "\n";
 		final String fieldDelimiter = "\t";//",";//"\t";
 		final String includingFields = "0110010000000000";//"0110011111000110";
@@ -343,19 +344,6 @@ public class PprlFlinkJob {
 				//Person.AGE_ATTRIBUTE
 		};
 		final boolean ignoreFirstLine = false;
-		
-		
-		/*
-		 * values for generated data:
-		 * 		- dataFilePath = "org_E_100000.csv";
-		 * 		- modifiedDataFilePath = "dup_E_100000.csv";
-		 * 		- lineDelimiter = "\n";
-		 * 		- fieldDelimiter = ",";
-		 * 		- ignoreFirstLine = true;
-		 * 		- includingFields = "111011111000000";
-		 * 		- personFields = {"id", "firstName", "lastName", "addressPartOne", "addressPartTwo", "city", "zip", "state");
-		 */
-				
 		final boolean withCharacterPadding = true;
 		final boolean bloomFilterBuildVariantOne = false;
 		
