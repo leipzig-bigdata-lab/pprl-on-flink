@@ -2,7 +2,9 @@
 
 PPRL on Flink Projekt im Rahmen des Big Data Praktikums der Abteilung Datenbanken der Universität Leipzig im Sommersemester 2016.
 
-### Hinweise
+## Hinweise
+
+#### Ausführung
 
 - Zur Ausführung des PPRL-Prozesses dient die Klasse `PprlFlinkJob`
 - Um das PPRL durchzuführen, muss ein neuer `PprlFlinkJob` angelegt werden
@@ -25,7 +27,9 @@ PPRL on Flink Projekt im Rahmen des Big Data Praktikums der Abteilung Datenbanke
   - `comparisonThreshold`: Schwellwert für die Ähnlichkeitsberechnung
 - Mit `job.runJob();` kann der PPRL-Job gestartet werden
 
-- Der PPPR-Prozess besteht aus 6 Teilschritten, die Ergebnisse für jeden Teilschritt werden im Ordner *output_files* gespeichert
+#### PPRL-Prozess
+
+- Der PPRL-Prozess besteht aus 6 Teilschritten, die Ergebnisse für jeden Teilschritt werden im Ordner *output_files* gespeichert
 - Die Teilschritte sind:
   1. Auslesen der Datenquellen und Übertragung der Datensätze mit den entsprechenden Attributen in `Person`-Objekte
   2. Erstellung der n-Gramme (Tokens) und und daraus die enstprechenden Bloom Filter
@@ -34,8 +38,9 @@ PPRL on Flink Projekt im Rahmen des Big Data Praktikums der Abteilung Datenbanke
   5. Entfernung von doppelten Kandidaten-Record-Paaren
   6. Berechnung der Ähnlichkeit der Kandidaten-Record-Paare und Ausgabe der Matching Pairs
 
-- Paketstruktur:
-  - `dbs.bigdata.flink.pprl.data`: Enthält Klassen zum Laden und Speichern der Daten als `Person`-Objekte
-  - `dbs.bigdata.flink.pprl.functions`: Enthält alle Klassen, welche Flink-Operationen realisieren und zur Transformation der Daten eingesetzt werden
-  - `dbs.bigdata.flink.pprl.job`: Enthält die Klasse `PprlFlinkJob`
-  - `dbs.bigdata.flink.pprl.utils`: Enthält Klassen zur Realisierung von LSH und der Bloom Filter
+#### Paketstruktur
+
+- `dbs.bigdata.flink.pprl.data`: Enthält Klassen zum Laden und Speichern der Daten als `Person`-Objekte
+- `dbs.bigdata.flink.pprl.functions`: Enthält alle Klassen, welche Flink-Operationen realisieren und zur Transformation der Daten eingesetzt werden
+- `dbs.bigdata.flink.pprl.job`: Enthält die Klasse `PprlFlinkJob`
+- `dbs.bigdata.flink.pprl.utils`: Enthält Klassen zur Realisierung von LSH und der Bloom Filter
